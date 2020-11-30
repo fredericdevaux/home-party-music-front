@@ -8,8 +8,10 @@ import * as Colyseus from 'colyseus.js'
 import { mapMutations } from 'vuex'
 export default {
   created() {
-    const client = new Colyseus.Client(process.env.WEBSOCKET_URL)
-    this.setClient(client)
+    if (process.client) {
+      const client = new Colyseus.Client(process.env.WEBSOCKET_URL)
+      this.setClient(client)
+    }
   },
   methods: {
     ...mapMutations({
