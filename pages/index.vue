@@ -29,7 +29,7 @@
 export default {}
 </script>
 
-<style>
+<style lang="scss">
 .container {
   margin: 0 auto;
   min-height: 100vh;
@@ -47,6 +47,7 @@ export default {}
   font-size: 100px;
   color: #35495e;
   letter-spacing: 1px;
+  color: $test-variable;
 }
 
 .subtitle {
