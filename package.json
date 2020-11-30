@@ -9,7 +9,7 @@
     "generate": "nuxt generate",
     "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "lint": "npm run lint:js",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "ENV=noprod npm run build"
   },
   "dependencies": {
     "colyseus.js": "^0.14.1",
