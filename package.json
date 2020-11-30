@@ -11,6 +11,7 @@
     "lint": "npm run lint:js"
   },
   "dependencies": {
+    "colyseus.js": "^0.14.1",
     "core-js": "^3.6.5",
     "nuxt": "^2.14.6"
   },

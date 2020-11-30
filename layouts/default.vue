@@ -3,7 +3,23 @@
     <Nuxt />
   </div>
 </template>
-
+<script>
+import * as Colyseus from 'colyseus.js'
+import { mapMutations } from 'vuex'
+export default {
+  created() {
+    const client = new Colyseus.Client(
+      'ws://home-party-music-back.herokuapp.com/'
+    )
+    this.setClient(client)
+  },
+  methods: {
+    ...mapMutations({
+      setClient: 'client/SET_CLIENT',
+    }),
+  },
+}
+</script>
 <style>
 html {
   font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
