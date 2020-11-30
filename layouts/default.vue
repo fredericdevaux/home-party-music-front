@@ -8,9 +8,7 @@ import * as Colyseus from 'colyseus.js'
 import { mapMutations } from 'vuex'
 export default {
   created() {
-    const client = new Colyseus.Client(
-      'ws://home-party-music-back.herokuapp.com/'
-    )
+    const client = new Colyseus.Client(process.env.WEBSOCKET_URL)
     this.setClient(client)
   },
   methods: {
