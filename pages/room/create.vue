@@ -12,6 +12,7 @@
 import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
   name: 'Create',
+  layout: 'websocket',
   computed: {
     username: {
       get() {

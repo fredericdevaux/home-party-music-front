@@ -1,13 +1,17 @@
 <template>
-    $END$
+  <div class="chatroom-title">Room : {{ roomId }}</div>
 </template>
 
 <script>
-  export default {
-    name: 'ChatroomTitle'
-  }
+import { mapState } from 'vuex'
+export default {
+  name: 'ChatroomTitle',
+  computed: {
+    ...mapState({
+      roomId: (state) => state.room.room.id,
+    }),
+  },
+}
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,15 +1,8 @@
 <template>
   <div>
-    <div v-if="room">
-      <div>Le lobby {{ $route.params.id }}</div>
-      <div>
-        <h2>Joueurs :</h2>
-        <ul v-if="users.length">
-          <li v-for="(user, index) in users" :key="index">
-            {{ user[1].username }}
-          </li>
-        </ul>
-      </div>
+    <div v-if="room" class="room">
+      <div class="room__part"></div>
+      <chatroom />
     </div>
     <div v-else>
       <label for="username">Ton p'tit nom</label>
@@ -26,8 +19,11 @@
 
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
+import Chatroom from '../../components/chatroom/Chatroom'
 export default {
   name: 'Id',
+  components: { Chatroom },
+  layout: 'websocket',
   data: () => ({
     usernameModel: '',
   }),
@@ -42,7 +38,6 @@ export default {
     },
     ...mapState({
       client: (state) => state.client.client,
-      users: (state) => state.room.users,
       usernameState: (state) => state.user.username,
       room: (state) => state.room.room,
     }),
@@ -73,4 +68,17 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.room {
+  display: flex;
+}
+
+.room__part {
+  width: 70%;
+}
+
+.chatroom {
+  width: 30%;
+  max-width: 430px;
+}
+</style>
