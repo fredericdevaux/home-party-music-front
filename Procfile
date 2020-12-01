@@ -1,1 +1,1 @@
-web: npm run start
+web: ENV=noprod npm run start
