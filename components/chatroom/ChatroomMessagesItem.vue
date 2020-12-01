@@ -36,8 +36,8 @@ export default {
   },
   computed: {
     formatedDate() {
-      return this.$date(this.message.date).format(
-        this.$date(this.message.date).isToday() ? 'HH:mm' : 'DD/MM/YYYY HH:mm'
+      return this.$dayjs(this.message.date).format(
+        this.$dayjs(this.message.date).isToday() ? 'HH:mm' : 'DD/MM/YYYY HH:mm'
       )
     },
   },

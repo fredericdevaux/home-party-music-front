@@ -16,6 +16,7 @@
     "@nuxtjs/style-resources": "^1.0.0",
     "colyseus.js": "^0.14.1",
     "core-js": "^3.6.5",
+    "dayjs": "^1.9.6",
     "nuxt": "^2.14.6",
     "vue-dayjs-plugin": "^1.0.0"
   },
