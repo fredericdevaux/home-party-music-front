@@ -12,11 +12,12 @@
     "heroku-postbuild": "ENV=noprod npm run build"
   },
   "dependencies": {
+    "@nuxtjs/dotenv": "^1.4.1",
+    "@nuxtjs/style-resources": "^1.0.0",
     "colyseus.js": "^0.14.1",
     "core-js": "^3.6.5",
     "nuxt": "^2.14.6",
-    "@nuxtjs/style-resources": "^1.0.0",
-    "@nuxtjs/dotenv": "^1.4.1"
+    "vue-dayjs-plugin": "^1.0.0"
   },
   "devDependencies": {
     "@nuxtjs/dotenv": "^1.4.1",

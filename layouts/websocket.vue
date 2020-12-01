@@ -8,10 +8,16 @@ import * as Colyseus from 'colyseus.js'
 import { mapMutations } from 'vuex'
 export default {
   created() {
+<<<<<<< HEAD:layouts/websocket.vue
+    console.log('crated')
+    const client = new Colyseus.Client(process.env.WEBSOCKET_URL)
+    this.setClient(client)
+=======
     if (process.client) {
       const client = new Colyseus.Client(process.env.WEBSOCKET_URL)
       this.setClient(client)
     }
+>>>>>>> ed26e5cf957e4aace761042ff33c67541eaec341:layouts/default.vue
   },
   methods: {
     ...mapMutations({
