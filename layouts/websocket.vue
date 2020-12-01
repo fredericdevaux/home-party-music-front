@@ -4,14 +4,11 @@
   </div>
 </template>
 <script>
-import * as Colyseus from 'colyseus.js'
 import { mapMutations } from 'vuex'
 export default {
-  created() {
-    if (process.client) {
-      const client = new Colyseus.Client(process.env.WEBSOCKET_URL)
-      this.setClient(client)
-    }
+  mounted() {
+    const client = new this.$colyseus.Client(process.env.WEBSOCKET_URL)
+    this.setClient(client)
   },
   methods: {
     ...mapMutations({

@@ -1,4 +1,8 @@
-import Vue from 'vue'
-import VueDayjs from 'vue-dayjs-plugin'
+import dayjs from 'dayjs'
+import isToday from 'dayjs/plugin/isToday'
 
-Vue.use(VueDayjs)
+export default ({ app }, inject) => {
+  app.$dayjs = dayjs
+  app.$dayjs.extend(isToday)
+  inject('dayjs', app.$dayjs)
+}
