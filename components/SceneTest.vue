@@ -8,8 +8,8 @@
     ></canvas>
   </div>
 </template>
-
 <script>
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 import * as THREE from 'three'
 export default {
   name: 'SceneTest',
@@ -64,22 +64,48 @@ const material2 = new THREE.MeshPhongMaterial({ color: 0x629E1B })
     // eslint-disable-next-line prettier/prettier
 const material3 = new THREE.MeshPhongMaterial({ color: 0xEB5A34 })
     const mesh3 = new THREE.Mesh(geometry3, material3)
-    mesh3.position.set(-60, -20, -400)
-    scene.add(mesh3)
+    mesh3.position.set(-40, -10, -400)
+    //  scene.add(mesh3)
+
+    // Personnage
+    const loader= new FBXLoader();
+      loader.load("models/aj.fbx", (model)=> {
+      console.log("MODEL",model)
+      model.position.set(-10, -20, -700) 
+      scene.add(model)
+      }, undefined, (error)=> {
+        console.error('Error',error)
+      }) ;
 
     // render animation
     requestAnimationFrame(render)
     function render() {
-      mesh.rotation.x += 0.003
-      mesh.rotation.y += 0.003
-      mesh2.rotation.x += 0.004
-      mesh2.rotation.y += 0.004
-      mesh3.rotation.x += 0.005
-      mesh3.rotation.y += 0.005
+      mesh.rotation.x += beatMaker()
+      mesh.rotation.y += volumeMaker()
+      mesh2.rotation.x += beatMaker()
+      mesh2.rotation.y += volumeMaker()
+      mesh3.rotation.x += beatMaker()
+      mesh3.rotation.y += volumeMaker()
       renderer.render(scene, camera)
       requestAnimationFrame(render)
     }
   },
+}
+function beatMaker() {
+  const x = Math.floor(Math.random() * Math.floor(2))
+  if (x === 0) {
+    return 0.003
+  } else {
+    return 0.01
+  }
+}
+function volumeMaker() {
+  const x = Math.floor(Math.random() * Math.floor(2))
+  if (x === 0) {
+    return 0.004
+  } else {
+    return 0.001
+  }
 }
 </script>
 
