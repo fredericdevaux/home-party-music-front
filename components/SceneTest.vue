@@ -9,6 +9,7 @@
   </div>
 </template>
 <script>
+/* eslint-disable */
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 import * as THREE from 'three'
 // import { OrbitControls } from "https://threejs.org/examples/jsm/controls/OrbitControls.js";
@@ -20,16 +21,6 @@ export default {
     const player = { height:1.8, speed:4, turnSpeed:Math.PI*0.02 };
 
     function init(){
-      renderer = new THREE.WebGLRenderer({
-        canvas: document.getElementById('myCanvas'),
-        antialias: true,
-      })
-
-      // eslint-disable-next-line prettier/prettier
-      renderer.setClearColor(0xFFFFFF)
-      renderer.setPixelRatio(window.devicePixelRatio)
-      renderer.setSize(window.innerWidth, window.innerHeight)
-
       // camera
       camera = new THREE.PerspectiveCamera(
         35,
@@ -40,7 +31,6 @@ export default {
 
       // scene
       scene = new THREE.Scene()
-
       // light
       // eslint-disable-next-line unicorn/number-literal-case
       const light = new THREE.AmbientLight(0xffffff, 0.5)
@@ -65,24 +55,58 @@ export default {
       mesh2.position.set(60, -80, -700)
       scene.add(mesh2)
 
+      const geometry3 = new THREE.CubeGeometry(140, 140, 140)
+      // eslint-disable-next-line prettier/prettier
+      const material3 = new THREE.MeshPhongMaterial({ color: 0x629E1B })
+      mesh2 = new THREE.Mesh(geometry3, material3)
+      mesh2.position.set(-60, 0, 700)
+      scene.add(mesh2)
+
+      const geometry4 = new THREE.CubeGeometry(140, 140, 140)
+      // eslint-disable-next-line prettier/prettier
+      const material4 = new THREE.MeshPhongMaterial({ color: 0x629E1B })
+      mesh2 = new THREE.Mesh(geometry4, material4)
+      mesh2.position.set(300, 0, 700)
+      scene.add(mesh2)
+
+      const meshFloor = new THREE.Mesh(
+        new THREE.PlaneGeometry(2000, 2000, 10, 10),
+        new THREE.MeshPhongMaterial({color: 0x335eea})
+      );
+      meshFloor.position.set(0, -250, 0)
+      meshFloor.rotation.x -= Math.PI / 2;
+      meshFloor.receiveShadow = true;
+      scene.add(meshFloor);
+
       const loader= new FBXLoader();
       loader.load("models/aj.fbx", (model)=> {
         console.log("MODEL",model)
-        model.position.set(-10, -20, -700)
-        // model.add(camera)
-        scene.add(model)
-
-        camera.lookAt(model.position)
+        model.position.set(0, -155, 0)
+        model.rotateY(110)
+        // camera.lookAt(model.position)
+        camera.add(model)
+        camera.position.set(0, player.height, 1000);
+        camera.lookAt(new THREE.Vector3(0,player.height,0));
         scene.add(camera)
 
       }, undefined, (error)=> {
         console.error('Error',error)
       }) ;
 
+      renderer = new THREE.WebGLRenderer({
+        canvas: document.getElementById('myCanvas'),
+        antialias: true,
+      })
+
+      // eslint-disable-next-line prettier/prettier
+      renderer.setClearColor(0xFFFFFF)
+      renderer.setPixelRatio(window.devicePixelRatio)
+      renderer.setSize(window.innerWidth, window.innerHeight)
+
+      document.body.appendChild(renderer.domElement);
+
       animate();
     }
-
-
 
     function beatMaker() {
       const x = Math.floor(Math.random() * Math.floor(2))
@@ -110,28 +134,24 @@ export default {
 
       // Keyboard movement inputs
       if(keyboard[83]){ // S key
-        camera.position.x -= Math.sin(camera.rotation.y) * player.speed;
-        camera.position.z -= -Math.cos(camera.rotation.y) * player.speed;
+        camera.translateZ( player.speed );
       }
       if(keyboard[90]){ // Z key
-        camera.position.x += Math.sin(camera.rotation.y) * player.speed;
-        camera.position.z += -Math.cos(camera.rotation.y) * player.speed;
+        camera.translateZ( - player.speed );
       }
       if(keyboard[81]){ // Q key
-        camera.position.x += Math.sin(camera.rotation.y + Math.PI/2) * player.speed;
-        camera.position.z += -Math.cos(camera.rotation.y + Math.PI/2) * player.speed;
+        camera.translateX( - player.speed );
       }
       if(keyboard[68]){ // D key
-        camera.position.x += Math.sin(camera.rotation.y - Math.PI/2) * player.speed;
-        camera.position.z += -Math.cos(camera.rotation.y - Math.PI/2) * player.speed;
+        camera.translateX( player.speed );
       }
 
       // Keyboard turn inputs
       if(keyboard[37]){ // left arrow key
-        camera.rotation.y -= player.turnSpeed;
+        camera.rotation.y += player.turnSpeed;
       }
       if(keyboard[39]){ // right arrow key
-        camera.rotation.y += player.turnSpeed;
+        camera.rotation.y -= player.turnSpeed;
       }
 
       mesh.rotation.x += beatMaker()
