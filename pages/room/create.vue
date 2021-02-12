@@ -2,6 +2,7 @@
   <div>
     <label for="username">Ton p'tit nom</label>
     <input id="username" v-model="username" type="text" name="username" />
+    <playlists-list />
     <button :disabled="username.length < 3" @click="createRoom()">
       Créer une room
     </button>

@@ -12,9 +12,11 @@
     "heroku-postbuild": "ENV=noprod npm run build"
   },
   "dependencies": {
+    "@nuxtjs/axios": "^5.12.5",
     "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/style-resources": "^1.0.0",
     "colyseus.js": "^0.14.1",
+    "cookie-universal-nuxt": "^2.1.4",
     "core-js": "^3.6.5",
     "dayjs": "^1.9.6",
     "nuxt": "^2.14.6",
