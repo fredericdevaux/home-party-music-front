@@ -30,7 +30,12 @@ export default {
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
-  modules: ['@nuxtjs/style-resources', '@nuxtjs/dotenv'],
+  modules: [
+    '@nuxtjs/style-resources',
+    '@nuxtjs/dotenv',
+    '@nuxtjs/axios',
+    'cookie-universal-nuxt',
+  ],
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {},
