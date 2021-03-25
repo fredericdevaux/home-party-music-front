@@ -5,6 +5,7 @@
 <script>
 export default {
   layout: 'websocket',
+  created() {},
 }
 </script>
 
