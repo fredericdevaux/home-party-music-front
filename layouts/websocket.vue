@@ -1,11 +1,37 @@
 <template>
   <div>
+    <div
+      class="container pt-1 pb-1 mx-auto flex flex-row justify-between items-center"
+    >
+      <h1 class="text-4xl">SquadParty</h1>
+      <div v-if="spotifyUser" class="flex flex-row items-center">
+        <img
+          v-if="spotifyUser.images.length"
+          class="w-12 rounded-full mr-6"
+          :src="spotifyUser.images[0].url"
+          :alt="`Utilisateur ${spotifyUser.id}`"
+        />
+
+        <nuxt-link class="underline" :to="{ name: 'profile' }">{{
+          spotifyUser.id
+        }}</nuxt-link>
+      </div>
+      <a v-else :href="loginUrl">Connexion avec Spotify</a>
+    </div>
     <Nuxt />
   </div>
 </template>
 <script>
-import { mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 export default {
+  computed: {
+    loginUrl() {
+      return `${process.env.SERVER_URL}/login`
+    },
+    ...mapState({
+      spotifyUser: (state) => state.spotify.user,
+    }),
+  },
   mounted() {
     const client = new this.$colyseus.Client(process.env.WEBSOCKET_URL)
     this.setClient(client)
@@ -17,52 +43,3 @@ export default {
   },
 }
 </script>
-<style>
-html {
-  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-}
-
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
-  text-decoration: none;
-  padding: 10px 30px;
-}
-
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
-}
-
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
-}
-
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
-}
-</style>

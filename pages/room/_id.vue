@@ -1,11 +1,14 @@
 <template>
   <div>
-    <div v-if="room" class="room">
-      <div class="room__part"></div>
-      <chatroom />
+    <div v-if="room" class="room flex">
+      <div class="room__part flex-grow"></div>
+      <div class="w-1/3">
+        <player />
+        <chatroom />
+      </div>
     </div>
     <div v-else>
-      <label for="username">Ton p'tit nom</label>
+      <label for="username">Nom d'utilisateur</label>
       <input id="username" v-model="username" type="text" name="username" />
       <button
         :disabled="!username.length && username.length < 3"
@@ -18,11 +21,14 @@
 </template>
 
 <script>
+/* eslint-disable camelcase */
 import { mapState, mapMutations, mapActions } from 'vuex'
 import Chatroom from '../../components/chatroom/Chatroom'
+
 export default {
   name: 'Id',
   components: { Chatroom },
+  middleware: 'spotify',
   layout: 'websocket',
   data: () => ({
     usernameModel: '',
@@ -67,18 +73,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-.room {
-  display: flex;
-}
-
-.room__part {
-  width: 70%;
-}
-
-.chatroom {
-  width: 30%;
-  max-width: 430px;
-}
-</style>

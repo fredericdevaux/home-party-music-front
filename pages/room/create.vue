@@ -1,8 +1,19 @@
 <template>
-  <div>
-    <label for="username">Ton p'tit nom</label>
-    <input id="username" v-model="username" type="text" name="username" />
-    <button :disabled="username.length < 3" @click="createRoom()">
+  <div class="container mx-auto mt-6">
+    <label for="username">Nom d'utilisateur</label>
+    <input
+      id="username"
+      v-model="username"
+      class="focus:ring-indigo-500 focus:border-indigo-500 pl-2 pr-2 sm:text-sm border-gray-400 border-2 rounded-md"
+      type="text"
+      name="username"
+    />
+    <playlists-list />
+    <button
+      class="bg-green-600 rounded-md text-white pr-1.5 pl-1.5 pt-1 pb-1.5 mt-4"
+      :disabled="username.length < 3"
+      @click="createRoom()"
+    >
       Créer une room
     </button>
   </div>
@@ -13,6 +24,7 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
   name: 'Create',
   layout: 'websocket',
+  middleware: 'spotify',
   computed: {
     username: {
       get() {
@@ -35,6 +47,7 @@ export default {
           username: this.username,
         })
         .then((room) => {
+          console.log(room)
           this.setRoom(room)
           this.$router.push({ name: 'room-id', params: { id: room.id } })
         })
