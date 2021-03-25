@@ -25,10 +25,26 @@ export default {
       currentTrackArtists: 'player/currentTrackArtists',
       currentTrackName: 'player/currentTrackName',
       currentTrackCover: 'player/currentTrackCover',
+      currentTrackId: 'player/currentTrackId',
+      currentTrackPosition: 'player/currentTrackPosition',
+      isPlaying: 'player/isPlaying',
     }),
+  },
+  watch: {
+    isPlaying(newVal) {
+      this[!newVal ? 'pause' : 'resume']()
+    },
+    currentTrackId() {
+      this.play()
+    },
   },
   created() {
     if (process.client) {
+      // eslint-disable-next-line nuxt/no-globals-in-created
+      const spotifyScript = document.createElement('script')
+      spotifyScript.setAttribute('src', 'https://sdk.scdn.co/spotify-player.js')
+      // eslint-disable-next-line nuxt/no-globals-in-created
+      document.head.appendChild(spotifyScript)
       // eslint-disable-next-line nuxt/no-globals-in-created
       window.onSpotifyPlayerAPIReady = () => {
         // eslint-disable-next-line no-undef
@@ -37,6 +53,7 @@ export default {
           getOAuthToken: (cb) => {
             cb(this.$cookies.get('access_token'))
           },
+          volume: 0.5,
         })
 
         this.player.addListener('initialization_error', (e) => console.error(e))
@@ -50,17 +67,24 @@ export default {
             if (
               this.username === this.admin &&
               (current_track.id !== this.currentTrackId ||
-                paused !== this.paused)
+                paused === this.isPlaying)
             ) {
-              this.sendTrackState()
-              console.log('on send la trackState')
+              console.log(
+                paused,
+                this.isPlaying,
+                current_track.id,
+                this.currentTrackId
+              )
+              this.updateTrackState()
             }
           }
         )
 
         this.player.addListener('ready', (data) => {
           this.setDeviceId(data.device_id)
-          this.play(this.deviceId, 0)
+          let position = this.currentTrackPosition
+          if (this.admin !== this.username) position = position + 3500
+          this.play(position)
         })
 
         this.player.connect()
@@ -68,7 +92,57 @@ export default {
     }
   },
   methods: {
-    play(deviceId, position = 0) {
+    next() {
+      this.$axios.post(
+        `https://api.spotify.com/v1/me/player/next?device_id=${this.deviceId}`,
+        {},
+        {
+          credentials: true,
+          headers: {
+            Authorization: `Bearer ${this.$cookies.get('access_token')}`,
+          },
+        }
+      )
+    },
+    previous() {
+      this.$axios.post(
+        `https://api.spotify.com/v1/me/player/previous?device_id=${this.deviceId}`,
+        {},
+        {
+          credentials: true,
+          headers: {
+            Authorization: `Bearer ${this.$cookies.get('access_token')}`,
+          },
+        }
+      )
+    },
+    resume() {
+      console.log('RESUME')
+      this.$axios.put(
+        `https://api.spotify.com/v1/me/player/play?device_id=${this.deviceId}`,
+        {},
+        {
+          credentials: true,
+          headers: {
+            Authorization: `Bearer ${this.$cookies.get('access_token')}`,
+          },
+        }
+      )
+    },
+    pause() {
+      console.log('PAUSE')
+      this.$axios.put(
+        `https://api.spotify.com/v1/me/player/pause?device_id=${this.deviceId}`,
+        {},
+        {
+          credentials: true,
+          headers: {
+            Authorization: `Bearer ${this.$cookies.get('access_token')}`,
+          },
+        }
+      )
+    },
+    play(position = 0) {
       const data = {
         position_ms: position,
       }
@@ -80,7 +154,7 @@ export default {
       }
 
       this.$axios.put(
-        `https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`,
+        `https://api.spotify.com/v1/me/player/play?device_id=${this.deviceId}`,
         data,
         {
           credentials: true,
@@ -106,6 +180,7 @@ export default {
       setDeviceId: 'player/SET_DEVICE_ID',
     }),
     ...mapActions({
+      updateTrackState: 'room/updateTrackState',
       sendTrackState: 'room/sendTrackState',
     }),
   },
