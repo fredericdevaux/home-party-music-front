@@ -4,31 +4,12 @@ export const state = () => ({
   messages: [],
   playlistId: '',
   playlistUri: '',
-  trackState: {},
 })
 
 export const getters = {
   admin: (state) => {
     const { admin } = state.room.state
     return admin
-  },
-  currentTrackArtists: (state) => {
-    const { artists } = state.trackState?.item || []
-    return artists ? artists.map((artist) => artist.name).join(', ') : null
-  },
-  currentTrackName: (state) => {
-    const { name } = state.trackState?.item || ''
-    return name
-  },
-  currentTrackId: (state) => {
-    const { id } = state.trackState?.item || 0
-    return id
-  },
-  currentTrackPosition: (state) => {
-    // eslint-disable-next-line camelcase
-    const { progress_ms } = state.trackState || 0
-    // eslint-disable-next-line camelcase
-    return progress_ms
   },
 }
 
@@ -45,9 +26,6 @@ export const mutations = {
   SET_PLAYLIST(state, { playlistId, playlistUri }) {
     state.playlistId = playlistId
     state.playlistUri = playlistUri
-  },
-  SET_TRACK_STATE(state, trackState) {
-    state.trackState = trackState
   },
 }
 
@@ -71,7 +49,8 @@ export const actions = {
     })
 
     state.room.onMessage('track_state', (trackState) => {
-      commit('SET_TRACK_STATE', trackState)
+      console.log('TRACKSTATE', trackState)
+      commit('player/SET_CURRENT_TRACK', trackState, { root: true })
     })
 
     state.room.onMessage('joined', () => {
