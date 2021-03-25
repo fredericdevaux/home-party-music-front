@@ -1,17 +1,12 @@
 <template>
   <div>
     <div v-if="playlists.length" class="playlists_list">
-      <div v-for="playlist in playlists" :key="playlist.id">
-        <img
-          :src="playlist.images[0].url"
-          :alt="`Cover de la playlist ${playlist.name}`"
-        />
-        <a
-          target="_blank"
-          :href="`spotify://${playlist.external_urls.spotify}`"
-          >{{ playlist.name }}</a
-        >
-      </div>
+      <playlist-item
+        v-for="playlist in playlists"
+        :key="playlist.id"
+        class="mt-2"
+        :playlist="playlist"
+      />
     </div>
     <div v-else>
       <p>Vous n'avez pas encore de playlists !</p>
@@ -35,9 +30,7 @@ export default {
         .get(`${process.env.SPOTIFY_BASE_API_URL}/me/playlists`, {
           credentials: true,
           headers: {
-            Authorization: `Bearer ${this.$cookies.get(
-              'spotify_access_token'
-            )}`,
+            Authorization: `Bearer ${this.$cookies.get('access_token')}`,
           },
         })
         .then((res) => {
