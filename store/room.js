@@ -49,12 +49,12 @@ export const actions = {
     })
 
     state.room.onMessage('track_state', (trackState) => {
-      console.log('TRACKSTATE', trackState)
       commit('player/SET_CURRENT_TRACK', trackState, { root: true })
     })
 
-    state.room.onMessage('joined', () => {
-      getters.admin === rootState.user.username && dispatch('sendTrackState')
+    state.room.onMessage('update_track_state', (trackState) => {
+      commit('player/SET_CURRENT_TRACK', trackState, { root: true })
+      console.log('UPDATE TRACK STATE', trackState)
     })
   },
   sendMessage({ state, rootState }, messageContent) {
@@ -73,8 +73,19 @@ export const actions = {
         },
       })
       .then((res) => {
-        console.log(res)
         state.room.send('track_state', res.data)
+      })
+  },
+  updateTrackState({ state }) {
+    this.$axios
+      .get('https://api.spotify.com/v1/me/player/currently-playing', {
+        credentials: true,
+        headers: {
+          Authorization: `Bearer ${this.$cookies.get('access_token')}`,
+        },
+      })
+      .then((res) => {
+        state.room.send('update_track_state', res.data)
       })
   },
 }

@@ -78,16 +78,5 @@ export default {
       setRoom: 'room/setRoom',
     }),
   },
-  head() {
-    return {
-      script: [
-        {
-          hid: 'spotify-player',
-          src: 'https://sdk.scdn.co/spotify-player.js',
-          defer: true,
-        },
-      ],
-    }
-  },
 }
 </script>
