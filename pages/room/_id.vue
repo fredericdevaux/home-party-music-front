@@ -1,16 +1,23 @@
 <template>
-  <div>
-    <div v-if="room" class="room flex">
+  <div class="h-full">
+    <div v-if="room" class="room flex h-full">
       <div class="room__part flex-grow"></div>
-      <div class="w-1/3">
-        <player />
+      <div class="w-1/3 h-full flex flex-col justify-end">
         <chatroom />
+        <player />
       </div>
     </div>
-    <div v-else>
-      <label for="username">Nom d'utilisateur</label>
-      <input id="username" v-model="username" type="text" name="username" />
+    <div v-else class="h-full flex justify-center items-center text-4xl">
+      <label for="username">Nom d'utilisateur :</label>
+      <input
+        id="username"
+        v-model="username"
+        type="text"
+        name="username"
+        class="mx-3 p-2 rounded outline-none"
+      />
       <button
+        class="text-black bg-gray-200 rounded-xl p-2"
         :disabled="!username.length && username.length < 3"
         @click="joinRoom()"
       >

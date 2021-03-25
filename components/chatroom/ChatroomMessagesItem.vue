@@ -11,14 +11,16 @@
         >{{ message.author }} a dit :</span
       >
     </div>
+
     <div class="chatroom-messages-item__content">
       {{ message.content }}
     </div>
+
     <div
       v-if="message.type !== 'system'"
       class="chatroom-messages-item__bottom"
     >
-      <span>{{ formatedDate }}</span>
+      <span class="text-right">{{ formatedDate }}</span>
     </div>
   </div>
 </template>
@@ -46,18 +48,17 @@ export default {
 
 <style scoped>
 .chatroom-messages-item {
-  border-radius: 20px;
   padding: 10px;
   display: inline-block;
   max-width: 70%;
 }
 
 .chatroom-messages-item--other {
-  background-color: white;
+  @apply bg-gray-500 text-white rounded-t-xl rounded-br-xl;
 }
 
 .chatroom-messages-item--me {
-  background-color: darkgreen;
+  @apply bg-blue-400 text-white rounded-t-xl rounded-bl-xl;
 }
 
 .chatroom-messages-item--system {
