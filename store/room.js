@@ -54,7 +54,6 @@ export const actions = {
 
     state.room.onMessage('update_track_state', (trackState) => {
       commit('player/SET_CURRENT_TRACK', trackState, { root: true })
-      console.log('UPDATE TRACK STATE', trackState)
     })
   },
   sendMessage({ state, rootState }, messageContent) {

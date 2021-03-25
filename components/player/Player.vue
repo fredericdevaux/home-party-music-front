@@ -3,64 +3,95 @@
     class="flex justify-between items-center bg-gray-800 p-4 text-white w-auto mt-12 outline-none"
   >
     <div class="flex">
-      <img
-        src="https://raplume.eu/wp-content/uploads/2021/02/https___images.genius.com_bab985edf7b76b9ff29f7b103ce092cf.1000x1000x1.jpg"
-        alt=""
-        class="w-16 mr-4"
-      />
-      <!--    <p>{{ currentTrackName }} - {{ currentTrackArtists }}</p>-->
-      <div class="flex-col flex justify-center">
-        <p>CINÉ CLUB</p>
-        <p>DIOSCURES</p>
+      <div class="flex infos items-center">
+        <img :src="currentTrackCover" alt="" class="self-center w-16 mr-4" />
+        <!--    <p>{{ currentTrackName }} - {{ currentTrackArtists }}</p>-->
+        <div class="flex-col flex justify-center overflow-hidden">
+          <p>
+            {{ currentTrackName }}
+          </p>
+          <p>
+            {{ currentTrackArtists }}
+          </p>
+        </div>
       </div>
     </div>
 
-    <div class="flex w-40 justify-between">
-      <svg
-        class="cursor-pointer w-10"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
-        />
-      </svg>
-
-      <svg
-        class="cursor-pointer w-10"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          class="cursor-pointer"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
-
-      <svg
-        class="cursor-pointer w-10"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M13 5l7 7-7 7M5 5l7 7-7 7"
-        />
-      </svg>
+    <div v-if="username === admin" class="flex w-40 justify-between controls">
+      <button title="Chanson précédente" @click="previous">
+        <i
+          ><svg
+            class="w-10"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0019 16V8a1 1 0 00-1.6-.8l-5.333 4zM4.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0011 16V8a1 1 0 00-1.6-.8l-5.334 4z"
+            /></svg
+        ></i></button
+      ><button v-if="isPlaying" title="Mettre en pause" @click="pause">
+        <i
+          ><svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            class="w-10"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"
+            /></svg
+        ></i>
+      </button>
+      <button v-else title="Lire la chanson" @click="resume">
+        <i>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            class="w-10"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+            />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        </i>
+      </button>
+      <button title="Chanson suivante" @click="next">
+        <i
+          ><svg
+            class="w-10"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M11.933 12.8a1 1 0 000-1.6L6.6 7.2A1 1 0 005 8v8a1 1 0 001.6.8l5.333-4zM19.933 12.8a1 1 0 000-1.6l-5.333-4A1 1 0 0013 8v8a1 1 0 001.6.8l5.333-4z"
+            /></svg
+        ></i>
+      </button>
     </div>
 
     <div>
@@ -92,6 +123,9 @@ export default {
     player: null,
   }),
   computed: {
+    isAdmin() {
+      return this.username === this.admin
+    },
     ...mapState({
       username: (state) => state.user.username,
       deviceId: (state) => state.player.deviceId,
@@ -109,10 +143,10 @@ export default {
   },
   watch: {
     isPlaying(newVal) {
-      this[!newVal ? 'pause' : 'resume']()
+      !this.isAdmin && this[!newVal ? 'pause' : 'resume']()
     },
     currentTrackId() {
-      this.play()
+      !this.isAdmin && this.play()
     },
   },
   created() {
@@ -146,12 +180,6 @@ export default {
               (current_track.id !== this.currentTrackId ||
                 paused === this.isPlaying)
             ) {
-              console.log(
-                paused,
-                this.isPlaying,
-                current_track.id,
-                this.currentTrackId
-              )
               this.updateTrackState()
             }
           }
@@ -194,7 +222,6 @@ export default {
       )
     },
     resume() {
-      console.log('RESUME')
       this.$axios.put(
         `https://api.spotify.com/v1/me/player/play?device_id=${this.deviceId}`,
         {},
@@ -207,7 +234,6 @@ export default {
       )
     },
     pause() {
-      console.log('PAUSE')
       this.$axios.put(
         `https://api.spotify.com/v1/me/player/pause?device_id=${this.deviceId}`,
         {},
@@ -263,3 +289,12 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+.infos {
+  max-width: 160px;
+  p {
+    @apply whitespace-nowrap overflow-ellipsis overflow-hidden;
+  }
+}
+</style>

@@ -20,10 +20,7 @@ export default {
   components: { ChatroomMessagesItem },
   watch: {
     messages() {
-      console.log(this.$refs.messagesContent.scrollHeight)
-      console.log(this.$refs.messagesContent.scrollTop)
-      this.$refs.messagesContent.scrollTop = this.$refs.messagesContent.scrollHeight
-      console.log(this.$refs.messagesContent.scrollTop)
+      // TODO scroll automatique vers le bas envoie message / this.$refs.messagesContent.scrollTop = this.$refs.messagesContent.scrollHeight
     },
   },
   computed: {
