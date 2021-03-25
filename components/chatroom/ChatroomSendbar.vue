@@ -1,10 +1,10 @@
 <template>
-  <div class="chatroom-sendbar">
+  <div class="chatroom-sendbar text-black">
     <form class="flex flex-row" @submit.prevent="prepareMessage(message)">
       <input
         ref="message"
         v-model="message"
-        class="flex-grow"
+        class="flex-grow p-2"
         type="text"
         placeholder="Votre message"
       />

@@ -1,7 +1,7 @@
 <template>
-  <div class="chatroom-messages">
+  <div class="chatroom-messages border border-white rounded-t">
     <div class="chatroom-messages__wrapper">
-      <div class="chatrooom-messages__content">
+      <div ref="messagesContent" class="chatrooom-messages__content">
         <chatroom-messages-item
           v-for="message in messages"
           :key="message.id"
@@ -18,6 +18,14 @@ import ChatroomMessagesItem from './ChatroomMessagesItem'
 export default {
   name: 'ChatroomMessages',
   components: { ChatroomMessagesItem },
+  watch: {
+    messages() {
+      console.log(this.$refs.messagesContent.scrollHeight)
+      console.log(this.$refs.messagesContent.scrollTop)
+      this.$refs.messagesContent.scrollTop = this.$refs.messagesContent.scrollHeight
+      console.log(this.$refs.messagesContent.scrollTop)
+    },
+  },
   computed: {
     ...mapState({
       messages: (state) => state.room.messages,
@@ -28,7 +36,6 @@ export default {
 
 <style lang="scss" scoped>
 .chatroom-messages {
-  background-color: grey;
   overflow: hidden;
 }
 

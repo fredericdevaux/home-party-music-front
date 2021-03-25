@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="bg-black h-screen text-white">
     <div
-      class="container pt-1 pb-1 mx-auto flex flex-row justify-between items-center"
+      class="text-white w-full px-8 pt-1 pb-1 mx-auto flex flex-row justify-between items-center fixed"
     >
       <h1 class="text-4xl">SquadParty</h1>
       <div v-if="spotifyUser" class="flex flex-row items-center">
@@ -18,7 +18,9 @@
       </div>
       <a v-else :href="loginUrl">Connexion avec Spotify</a>
     </div>
-    <Nuxt />
+    <div class="pt-16 h-full">
+      <Nuxt />
+    </div>
   </div>
 </template>
 <script>
@@ -43,3 +45,12 @@ export default {
   },
 }
 </script>
+
+<style>
+body {
+  font-family: Roboto;
+}
+input {
+  color: black;
+}
+</style>
