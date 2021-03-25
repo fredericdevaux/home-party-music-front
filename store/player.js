@@ -21,6 +21,10 @@ export const getters = {
     const { url } = state.currentTrackState?.item?.album?.images[0] || ''
     return url
   },
+  currentTrackPosition: (state) => {
+    const { progress_ms } = state.currentTrackState
+    return progress_ms
+  },
   isPlaying: (state) => {
     const { is_playing } = state.currentTrackState
     return is_playing
@@ -28,9 +32,6 @@ export const getters = {
 }
 
 export const mutations = {
-  SET_PAUSED(state, paused) {
-    state.paused = paused
-  },
   SET_CURRENT_TRACK(state, track) {
     state.currentTrackState = track
   },

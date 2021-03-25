@@ -1,10 +1,9 @@
 <template>
   <div>
     <div v-if="room" class="room flex">
-      <div class="room__part flex-grow">
-        <player />
-      </div>
+      <div class="room__part flex-grow"></div>
       <div class="w-1/3">
+        <player />
         <chatroom />
       </div>
     </div>
@@ -71,17 +70,6 @@ export default {
     ...mapActions({
       setRoom: 'room/setRoom',
     }),
-  },
-  head() {
-    return {
-      script: [
-        {
-          hid: 'spotify-player',
-          src: 'https://sdk.scdn.co/spotify-player.js',
-          defer: true,
-        },
-      ],
-    }
   },
 }
 </script>
