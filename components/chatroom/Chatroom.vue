@@ -25,7 +25,7 @@ export default {
 
 <style scoped>
 .chatroom {
-  height: 100vh;
+  height: 40vh;
   display: flex;
   flex-direction: column;
 }
