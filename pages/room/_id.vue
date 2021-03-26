@@ -1,13 +1,20 @@
 <template>
   <div class="h-full">
     <div v-if="room" class="room flex h-full">
-      <video autoplay muted loop id="myVideo" class="fixed w-full h-full top-0 left-0">
-        <source src="/video/videoplayback.webm" type="video/webm">
+      <video
+        id="myVideo"
+        ref="video"
+        autoplay
+        muted
+        loop
+        class="fixed w-full h-full top-0 left-0 z-0 object-cover"
+      >
+        <source src="/video/videoplayback.webm" type="video/webm" />
       </video>
       <div class="room__part flex-grow"></div>
-      <div class="w-1/3 h-full flex flex-col justify-end">
+      <div class="w-1/3 h-full flex flex-col justify-end relative">
         <chatroom />
-        <player />
+        <player ref="player" @toggle_pause_video="toggleVideo" />
       </div>
     </div>
     <div v-else class="h-full flex justify-center items-center text-4xl">
@@ -62,6 +69,9 @@ export default {
     this.username && !this.room && this.joinRoom()
   },
   methods: {
+    toggleVideo(pause) {
+      this.$refs.video[pause ? 'pause' : 'play']()
+    },
     joinRoom() {
       this.client
         .joinById(this.$route.params.id, {
@@ -85,7 +95,6 @@ export default {
 </script>
 
 <style scoped>
-
 .bg_video {
   background: ;
 }
