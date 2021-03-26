@@ -14,7 +14,7 @@
         v-model="username"
         type="text"
         name="username"
-        class="mx-3 p-2 rounded outline-none"
+        class="mx-3 p-2 rounded outline-none text-black"
       />
       <button
         class="text-black bg-gray-200 rounded-xl p-2"

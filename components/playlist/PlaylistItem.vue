@@ -11,12 +11,9 @@
       :src="playlist.images[0].url"
       :alt="`Cover de la playlist ${playlist.name}`"
     />
-    <a
-      :class="{ 'font-bold': isActive }"
-      target="_blank"
-      :href="`spotify://${playlist.external_urls.spotify}`"
-      >{{ playlist.name }}</a
-    >
+    <a :class="{ 'font-bold': isActive }" target="_blank">{{
+      playlist.name
+    }}</a>
   </div>
 </template>
 
