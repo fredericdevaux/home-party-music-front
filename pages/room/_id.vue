@@ -1,6 +1,9 @@
 <template>
   <div class="h-full">
     <div v-if="room" class="room flex h-full">
+      <video autoplay muted loop id="myVideo" class="fixed w-full h-full top-0 left-0">
+        <source src="/video/videoplayback.webm" type="video/webm">
+      </video>
       <div class="room__part flex-grow"></div>
       <div class="w-1/3 h-full flex flex-col justify-end">
         <chatroom />
@@ -80,3 +83,10 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+
+.bg_video {
+  background: ;
+}
+</style>
