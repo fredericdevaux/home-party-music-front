@@ -1,5 +1,5 @@
 export default function ({ app, redirect, store }) {
-  /* const spotifyAccessToken = app.$cookies.get('access_token')
+  const spotifyAccessToken = app.$cookies.get('access_token')
   if (spotifyAccessToken) {
     return app.$axios
       .get(`${process.env.SPOTIFY_BASE_API_URL}/me`, {
@@ -20,5 +20,5 @@ export default function ({ app, redirect, store }) {
       })
   } else {
     redirect('/login')
-  } */
+  }
 }
