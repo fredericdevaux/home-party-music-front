@@ -26,7 +26,7 @@ export default {
         this.$cookies.set('refresh_token', urlParams.get('refresh_token'))
       urlParams.get('access_token') &&
         this.$cookies.set('access_token', urlParams.get('access_token'))
-      urlParams.get('access_token') && this.$router.push('/')
+      urlParams.get('access_token') && this.$router.push('/profile')
     }
   },
 }
