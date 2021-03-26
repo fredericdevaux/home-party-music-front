@@ -1,7 +1,7 @@
 <template>
   <div class="bg-black h-screen text-white">
     <div
-      class="text-white w-full px-8 pt-1 pb-1 mx-auto flex flex-row justify-between items-center fixed"
+      class="text-white w-full px-8 pt-1 pb-1 mx-auto flex flex-row justify-between items-center fixed z-50"
     >
       <h1 class="text-4xl">SquadParty</h1>
       <div v-if="spotifyUser" class="flex flex-row items-center">

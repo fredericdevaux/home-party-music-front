@@ -222,6 +222,7 @@ export default {
       )
     },
     resume() {
+      this.$emit('toggle_pause_video', false)
       this.$axios.put(
         `https://api.spotify.com/v1/me/player/play?device_id=${this.deviceId}`,
         {},
@@ -234,6 +235,7 @@ export default {
       )
     },
     pause() {
+      this.$emit('toggle_pause_video', true)
       this.$axios.put(
         `https://api.spotify.com/v1/me/player/pause?device_id=${this.deviceId}`,
         {},
