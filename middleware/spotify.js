@@ -1,7 +1,8 @@
-export default function ({ app, redirect, store }) {
+export default async function ({ app, redirect, store, route }) {
   const spotifyAccessToken = app.$cookies.get('access_token')
+  const loginRedirect = `${process.env.SERVER_URL}/login?to=${route.path}`
   if (spotifyAccessToken) {
-    return app.$axios
+    await app.$axios
       .get(`${process.env.SPOTIFY_BASE_API_URL}/me`, {
         credentials: true,
         headers: {
@@ -11,14 +12,28 @@ export default function ({ app, redirect, store }) {
       .then((res) => {
         store.commit('spotify/SET_USER', res.data, { root: true })
       })
-      .catch((err) => {
+      .catch(async (err) => {
         const status = err.response.status
         if (status === 401) {
-          //  dispatch('refreshToken')
-          redirect('/login')
+          if (app.$cookies.get('refresh_token')) {
+            await app.$axios
+              .get(`${process.env.SERVER_URL}/refresh_token`, {
+                params: {
+                  refresh_token: app.$cookies.get('refresh_token'),
+                },
+              })
+              .then((res) => {
+                app.$cookies.set('access_token', res.access_token)
+              })
+              .catch(() => {
+                redirect(`${loginRedirect}`)
+              })
+          } else {
+            redirect(`${loginRedirect}`)
+          }
         }
       })
   } else {
-    redirect('/login')
+    redirect(`${loginRedirect}`)
   }
 }

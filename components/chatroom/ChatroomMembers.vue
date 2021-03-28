@@ -1,8 +1,8 @@
 <template>
   <div class="chatroom-members">
     Participants ({{ members.length }}) :
-    <span v-for="(member, index) in members" :key="member[1].sessionId"
-      >{{ member[1].username
+    <span v-for="(member, index) in members" :key="member.sessionId"
+      >{{ member.username
       }}<template v-if="index + 1 !== members.length">, </template></span
     >
   </div>

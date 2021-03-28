@@ -18,16 +18,16 @@ export const getters = {
     return id
   },
   currentTrackCover: (state) => {
-    const { url } = state.currentTrackState?.item?.album?.images[0] || ''
-    return url
+    const { imageUrl } = state.currentTrackState?.item || ''
+    return imageUrl
   },
   currentTrackPosition: (state) => {
-    const { progress_ms } = state.currentTrackState
-    return progress_ms
+    const { progressMs } = state.currentTrackState
+    return progressMs
   },
   isPlaying: (state) => {
-    const { is_playing } = state.currentTrackState
-    return is_playing
+    const { isPlaying } = state.currentTrackState
+    return isPlaying
   },
 }
 

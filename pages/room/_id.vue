@@ -4,16 +4,19 @@
       <video
         id="myVideo"
         ref="video"
-        autoplay
         muted
         loop
         class="fixed w-full h-full top-0 left-0 z-0 object-cover"
       >
-        <source src="/video/videoplayback.webm" type="video/webm" />
+        <source src="/videos/videoplayback.webm" type="video/webm" />
       </video>
       <div class="room__part flex-grow"></div>
-      <div class="w-1/3 h-full flex flex-col justify-end relative">
-        <chatroom />
+      <div class="w-1/3 h-full flex flex-col justify-end relative bg-black">
+        <div class="p-2.5">
+          <songs-queue />
+          <songs-queue-searchbar />
+          <chatroom />
+        </div>
         <player ref="player" @toggle_pause_video="toggleVideo" />
       </div>
     </div>
@@ -39,14 +42,16 @@
 
 <script>
 /* eslint-disable camelcase */
+import { websocket } from '@/mixins/websocket'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import Chatroom from '../../components/chatroom/Chatroom'
 
 export default {
   name: 'Id',
   components: { Chatroom },
-  middleware: 'spotify',
-  layout: 'websocket',
+  middleware: ['spotify', 'tokens'],
+  mixins: [websocket],
+  layout: 'room',
   data: () => ({
     usernameModel: '',
   }),
@@ -68,16 +73,19 @@ export default {
   created() {
     this.username && !this.room && this.joinRoom()
   },
+  beforeDestroy() {
+    this.leaveRoom()
+  },
   methods: {
-    toggleVideo(pause) {
-      this.$refs.video[pause ? 'pause' : 'play']()
+    toggleVideo(play) {
+      this.$refs.video[play ? 'play' : 'pause']()
     },
     joinRoom() {
       this.client
         .joinById(this.$route.params.id, {
           username: this.username,
         })
-        .then((room) => {
+        .then((room, state) => {
           this.setRoom(room)
         })
         .catch((err) => {
@@ -89,6 +97,7 @@ export default {
     }),
     ...mapActions({
       setRoom: 'room/setRoom',
+      leaveRoom: 'room/leaveRoom',
     }),
   },
 }

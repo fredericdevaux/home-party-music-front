@@ -4,7 +4,8 @@
 
 <script>
 export default {
-  layout: 'websocket',
+  layout: 'default',
+  middleware: ['tokens'],
   created() {},
 }
 </script>
