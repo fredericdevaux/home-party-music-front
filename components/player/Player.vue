@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="player"
     class="flex justify-between items-center bg-gray-800 p-4 text-white w-auto mt-12 outline-none"
   >
     <div class="flex">
@@ -17,7 +18,7 @@
       </div>
     </div>
 
-    <div v-if="username === admin" class="flex w-40 justify-between controls">
+    <div v-if="isAdmin" class="flex w-40 justify-between controls">
       <button title="Chanson précédente" @click="previous">
         <i
           ><svg
@@ -123,16 +124,13 @@ export default {
     player: null,
   }),
   computed: {
-    isAdmin() {
-      return this.username === this.admin
-    },
     ...mapState({
       username: (state) => state.user.username,
       deviceId: (state) => state.player.deviceId,
-      playlistUri: (state) => state.room.playlistUri,
+      songsQueue: (state) => state.room.songsQueue,
     }),
     ...mapGetters({
-      admin: 'room/admin',
+      isAdmin: 'room/isAdmin',
       currentTrackArtists: 'player/currentTrackArtists',
       currentTrackName: 'player/currentTrackName',
       currentTrackCover: 'player/currentTrackCover',
@@ -144,9 +142,16 @@ export default {
   watch: {
     isPlaying(newVal) {
       !this.isAdmin && this[!newVal ? 'pause' : 'resume']()
+      this.$emit('toggle_pause_video', newVal)
     },
-    currentTrackId() {
-      !this.isAdmin && this.play()
+    songsQueue(newVal) {
+      newVal[0] && !this.currentTrackId && this.play(newVal[0].uri)
+    },
+    currentTrackId(newVal) {
+      !this.isAdmin && this.play(`spotify:track:${newVal}`)
+      this.songsQueue.find((song) => {
+        song.id === newVal && this.deleteSongFromQueue(song.id)
+      })
     },
   },
   created() {
@@ -172,24 +177,23 @@ export default {
         this.player.addListener('account_error', (e) => console.error(e))
         this.player.addListener('playback_error', (e) => console.error(e))
 
-        this.player.addListener(
-          'player_state_changed',
-          ({ paused, track_window: { current_track } }) => {
-            if (
-              this.username === this.admin &&
-              (current_track.id !== this.currentTrackId ||
-                paused === this.isPlaying)
-            ) {
-              this.updateTrackState()
-            }
+        this.player.addListener('player_state_changed', (state) => {
+          this.isAdmin && this.updateTrackState()
+          if (
+            state.track_window.previous_tracks.find(
+              (x) => x.id === state.track_window.current_track.id
+            )
+          ) {
+            this.next()
           }
-        )
+        })
 
         this.player.addListener('ready', (data) => {
           this.setDeviceId(data.device_id)
           let position = this.currentTrackPosition
-          if (this.admin !== this.username) position = position + 3500
-          this.play(position)
+          if (!this.isAdmin) position = position + 2000
+          this.currentTrackId &&
+            this.play(`spotify:track:${this.currentTrackId}`, position)
         })
 
         this.player.connect()
@@ -198,20 +202,24 @@ export default {
   },
   methods: {
     next() {
-      this.$axios.post(
-        `https://api.spotify.com/v1/me/player/next?device_id=${this.deviceId}`,
-        {},
-        {
-          credentials: true,
-          headers: {
-            Authorization: `Bearer ${this.$cookies.get('access_token')}`,
-          },
-        }
-      )
+      if (this.songsQueue.length) {
+        this.play(this.songsQueue[0].uri)
+      } else {
+        this.$axios.post(
+          `${process.env.SPOTIFY_BASE_API_URL}/me/player/next?device_id=${this.deviceId}`,
+          {},
+          {
+            credentials: true,
+            headers: {
+              Authorization: `Bearer ${this.$cookies.get('access_token')}`,
+            },
+          }
+        )
+      }
     },
     previous() {
       this.$axios.post(
-        `https://api.spotify.com/v1/me/player/previous?device_id=${this.deviceId}`,
+        `${process.env.SPOTIFY_BASE_API_URL}/me/player/previous?device_id=${this.deviceId}`,
         {},
         {
           credentials: true,
@@ -222,9 +230,8 @@ export default {
       )
     },
     resume() {
-      this.$emit('toggle_pause_video', false)
       this.$axios.put(
-        `https://api.spotify.com/v1/me/player/play?device_id=${this.deviceId}`,
+        `${process.env.SPOTIFY_BASE_API_URL}/me/player/play?device_id=${this.deviceId}`,
         {},
         {
           credentials: true,
@@ -235,9 +242,8 @@ export default {
       )
     },
     pause() {
-      this.$emit('toggle_pause_video', true)
       this.$axios.put(
-        `https://api.spotify.com/v1/me/player/pause?device_id=${this.deviceId}`,
+        `${process.env.SPOTIFY_BASE_API_URL}/me/player/pause?device_id=${this.deviceId}`,
         {},
         {
           credentials: true,
@@ -247,19 +253,15 @@ export default {
         }
       )
     },
-    play(position = 0) {
+    play(trackUri, position = 0) {
       const data = {
         position_ms: position,
       }
 
-      if (this.username === this.admin) {
-        data.context_uri = this.playlistUri
-      } else {
-        data.uris = [`spotify:track:${this.currentTrackId}`]
-      }
+      data.uris = [trackUri]
 
       this.$axios.put(
-        `https://api.spotify.com/v1/me/player/play?device_id=${this.deviceId}`,
+        `${process.env.SPOTIFY_BASE_API_URL}/me/player/play?device_id=${this.deviceId}`,
         data,
         {
           credentials: true,
@@ -271,7 +273,7 @@ export default {
     },
     seek(position, deviceId) {
       this.$axios.put(
-        `https://api.spotify.com/v1/me/player/seek?position_ms=${position}&device_id=${deviceId}`,
+        `${process.env.SPOTIFY_BASE_API_URL}/me/player/seek?position_ms=${position}&device_id=${deviceId}`,
         {},
         {
           credentials: true,
@@ -287,6 +289,7 @@ export default {
     ...mapActions({
       updateTrackState: 'room/updateTrackState',
       sendTrackState: 'room/sendTrackState',
+      deleteSongFromQueue: 'room/deleteSongFromQueue',
     }),
   },
 }

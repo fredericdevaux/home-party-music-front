@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "ENV=dev nuxt",
-    "build": "ENV=noprod nuxt build",
-    "start": "ENV=noprod nuxt start",
+    "build": "nuxt build",
+    "start": "nuxt start",
     "generate": "nuxt generate",
     "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "lint": "npm run lint:js",

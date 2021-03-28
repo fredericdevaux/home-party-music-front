@@ -18,15 +18,15 @@ import ChatroomMessagesItem from './ChatroomMessagesItem'
 export default {
   name: 'ChatroomMessages',
   components: { ChatroomMessagesItem },
-  watch: {
-    messages() {
-      // TODO scroll automatique vers le bas envoie message / this.$refs.messagesContent.scrollTop = this.$refs.messagesContent.scrollHeight
-    },
-  },
   computed: {
     ...mapState({
       messages: (state) => state.room.messages,
     }),
+  },
+  watch: {
+    messages() {
+      // TODO scroll automatique vers le bas envoie message / this.$refs.messagesContent.scrollTop = this.$refs.messagesContent.scrollHeight
+    },
   },
 }
 </script>
