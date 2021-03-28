@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full w-full flex justify-center items-center">
+  <div>
     <nuxt-link class="button" :to="{ name: 'room-create' }">
       Créer une room
     </nuxt-link>
@@ -9,8 +9,8 @@
 <script>
 export default {
   name: 'Index',
-  layout: 'websocket',
-  middleware: 'spotify',
+  layout: 'default',
+  middleware: ['spotify', 'tokens'],
 }
 </script>
 

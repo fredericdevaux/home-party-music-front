@@ -8,7 +8,6 @@
       type="text"
       name="username"
     />
-    <playlists-list />
     <button
       class="bg-green-600 rounded-md text-white pr-1.5 pl-1.5 pt-1 pb-1.5 mt-4"
       :disabled="username.length < 3"
@@ -20,11 +19,13 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { websocket } from '@/mixins/websocket'
+import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
 export default {
   name: 'Create',
-  layout: 'websocket',
-  middleware: 'spotify',
+  layout: 'default',
+  middleware: ['spotify', 'tokens'],
+  mixins: [websocket],
   computed: {
     username: {
       get() {
@@ -38,16 +39,19 @@ export default {
       client: (state) => state.client.client,
       usernameState: (state) => state.user.username,
     }),
+    ...mapGetters({
+      idSpotify: 'spotify/id',
+    }),
   },
   methods: {
     createRoom() {
       this.setUsername(this.username)
       this.client
         .create('my_room', {
+          admin: this.idSpotify,
           username: this.username,
         })
         .then((room) => {
-          console.log(room)
           this.setRoom(room)
           this.$router.push({ name: 'room-id', params: { id: room.id } })
         })
