@@ -38,6 +38,8 @@ export default {
     ...mapState({
       client: (state) => state.client.client,
       usernameState: (state) => state.user.username,
+      id: (state) => state.user.id,
+      avatarUrl: (state) => state.user.avatarUrl,
     }),
     ...mapGetters({
       idSpotify: 'spotify/id',
@@ -48,8 +50,9 @@ export default {
       this.setUsername(this.username)
       this.client
         .create('my_room', {
-          admin: this.idSpotify,
           username: this.username,
+          id: this.id,
+          avatarUrl: this.avatarUrl,
         })
         .then((room) => {
           this.setRoom(room)

@@ -1,12 +1,22 @@
 <template>
   <li
-    class="song-queue-result-item flex items-center whitespace-nowrap overflow-hidden"
+    class="song-queue-result-item flex items-center p-1.5 border-b"
+    :class="{ 'cursor-pointer hover:bg-purple-600': !isAdded }"
     @click="addSong(song)"
   >
     <img class="w-10" :src="cover" alt="" />
-    <h5 class="ml-1.5 whitespace-nowrap overflow-ellipsis overflow-hidden">
-      {{ song.name }} - <span class="text-gray-500">{{ artists }}</span>
-    </h5>
+
+    <div class="ml-1.5 overflow-hidden text-gray-500">
+      <h5 class="whitespace-nowrap overflow-ellipsis overflow-hidden">
+        <span class="text-white">{{ song.name }}</span> - {{ artists }}
+      </h5>
+      <p
+        v-if="song.queueBy"
+        class="text-gray-500 text-xs whitespace-nowrap overflow-ellipsis overflow-hidden"
+      >
+        Proposé par {{ song.queueBy.username }}
+      </p>
+    </div>
   </li>
 </template>
 

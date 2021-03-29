@@ -11,6 +11,11 @@ export default async function ({ app, redirect, store, route }) {
       })
       .then((res) => {
         store.commit('spotify/SET_USER', res.data, { root: true })
+        store.commit('user/SET_ID', res.data.id, { root: true })
+        store.commit('user/SET_AVATAR_URL', res.data.images[0].url, {
+          root: true,
+        })
+        store.commit('user/SET_USERNAME', res.data.id, { root: true })
       })
       .catch(async (err) => {
         const status = err.response.status

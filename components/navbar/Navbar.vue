@@ -1,6 +1,6 @@
 <template>
   <div
-    class="text-white w-full px-8 pt-1 pb-1 mx-auto flex flex-row justify-between items-center fixed z-50 bg-black"
+    class="text-white w-full px-8 pt-2 pb-2 mx-auto flex flex-row justify-between items-center fixed z-50 bg-black"
   >
     <h1 class="text-4xl"><nuxt-link :to="'/'">SquadParty</nuxt-link></h1>
     <div v-if="spotifyUser" class="flex flex-row items-center">

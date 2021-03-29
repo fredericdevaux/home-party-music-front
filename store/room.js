@@ -12,8 +12,8 @@ export const getters = {
     const { admin } = state.room.state
     return admin
   },
-  isAdmin: (state, getters, rootState, rootGetters) => {
-    return getters.admin === rootGetters['spotify/id']
+  isAdmin: (state, getters, rootState) => {
+    return getters.admin.id === rootState.user.id
   },
 }
 
@@ -53,6 +53,8 @@ export const mutations = {
 export const actions = {
   setRoom({ state, commit, dispatch, getters, rootState }, room) {
     commit('SET_ROOM', room)
+    commit('user/SET_SESSION_ID', room.sessionId, { root: true })
+
     state.room.onMessage('user_join', (user) => {
       commit('ADD_USER', user)
     })
@@ -128,7 +130,13 @@ export const actions = {
         state.room.send('update_track_state', res.data)
       })
   },
-  addSongToQueue({ state }, song) {
+  addSongToQueue({ state, rootState }, song) {
+    const user = {}
+    user.sessionId = rootState.user.sessionId
+    user.id = rootState.user.id
+    user.username = rootState.user.username
+    user.avatarUrl = rootState.user.avatarUrl
+    song.user = user
     state.room.send('add_song_to_queue', song)
   },
   deleteSongFromQueue({ state }, songId) {
