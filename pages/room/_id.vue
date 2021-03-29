@@ -11,12 +11,10 @@
         <source src="/videos/videoplayback.webm" type="video/webm" />
       </video>
       <div class="room__part flex-grow"></div>
-      <div class="w-1/3 h-full flex flex-col justify-end relative bg-black">
-        <div class="p-2.5">
-          <songs-queue />
-          <songs-queue-searchbar />
-          <chatroom />
-        </div>
+      <div class="w-1/3 h-full flex flex-col relative bg-black pt-16">
+        <songs-queue-searchbar />
+        <jukebox class="h-1/2 overflow-hidden" />
+        <chatroom class="flex-grow" />
         <player ref="player" @toggle_pause_video="toggleVideo" />
       </div>
     </div>
@@ -68,10 +66,9 @@ export default {
       client: (state) => state.client.client,
       usernameState: (state) => state.user.username,
       room: (state) => state.room.room,
+      id: (state) => state.user.id,
+      avatarUrl: (state) => state.user.avatarUrl,
     }),
-  },
-  created() {
-    this.username && !this.room && this.joinRoom()
   },
   beforeDestroy() {
     this.leaveRoom()
@@ -84,8 +81,10 @@ export default {
       this.client
         .joinById(this.$route.params.id, {
           username: this.username,
+          id: this.id,
+          avatarUrl: this.avatarUrl,
         })
-        .then((room, state) => {
+        .then((room) => {
           this.setRoom(room)
         })
         .catch((err) => {

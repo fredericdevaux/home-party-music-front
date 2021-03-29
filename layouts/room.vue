@@ -1,7 +1,7 @@
 <template>
   <div class="h-screen bg-black text-white">
     <navbar />
-    <div class="h-full pt-16">
+    <div class="h-full">
       <Nuxt />
     </div>
   </div>
