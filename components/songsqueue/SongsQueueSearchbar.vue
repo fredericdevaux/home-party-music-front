@@ -108,7 +108,6 @@ export default {
             this.activeResultIndex = this.$refs.result.length - 1
           }
         }
-        console.log(this.$refs.result.length, this.activeResultIndex)
       }
     },
   },
