@@ -1,7 +1,7 @@
 <template>
-  <div class="chatroom-messages border border-white rounded-t">
+  <div class="chatroom-messages border border-white">
     <div class="chatroom-messages__wrapper">
-      <div ref="messagesContent" class="chatrooom-messages__content">
+      <div ref="messagesContent" class="chatroom-messages__content">
         <chatroom-messages-item
           v-for="message in messages"
           :key="message.id"
@@ -41,7 +41,7 @@ export default {
   height: 100%;
 }
 
-.chatrooom-messages__content {
+.chatroom-messages__content {
   padding: 20px;
   display: flex;
   flex-direction: column;

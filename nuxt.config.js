@@ -36,6 +36,7 @@ export default {
     '@nuxtjs/dotenv',
     '@nuxtjs/axios',
     'cookie-universal-nuxt',
+    '@nuxtjs/svg',
   ],
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
