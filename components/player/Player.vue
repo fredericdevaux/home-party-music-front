@@ -150,7 +150,6 @@ export default {
   },
   methods: {
     next() {
-      console.log(this.songsQueue)
       if (this.songsQueue.length) {
         this.play(this.songsQueue[0].uri)
       } else {
