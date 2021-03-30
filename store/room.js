@@ -4,7 +4,7 @@ export const state = () => ({
   room: null,
   users: [],
   messages: [],
-  songsQueue: [],
+  songsQueue: []
 })
 
 export const getters = {
@@ -14,7 +14,7 @@ export const getters = {
   },
   isAdmin: (state, getters, rootState) => {
     return getters.admin.id === rootState.user.id
-  },
+  }
 }
 
 export const mutations = {
@@ -47,7 +47,7 @@ export const mutations = {
   },
   DELETE_SONG(state, songId) {
     deleteObjectFromArray(state.songsQueue, 'id', songId)
-  },
+  }
 }
 
 export const actions = {
@@ -61,7 +61,7 @@ export const actions = {
 
     state.room.onMessage('set_state', (currentState) => {
       commit('player/SET_CURRENT_TRACK', currentState.trackState, {
-        root: true,
+        root: true
       })
       commit('SET_SONGS_QUEUE', currentState.songsQueue)
       commit('SET_USERS', currentState.users)
@@ -106,29 +106,8 @@ export const actions = {
     message.content = messageContent
     state.room.send('message', message)
   },
-  sendTrackState({ state }) {
-    this.$axios
-      .get(`${process.env.SPOTIFY_BASE_API_URL}/me/player/currently-playing`, {
-        credentials: true,
-        headers: {
-          Authorization: `Bearer ${this.$cookies.get('access_token')}`,
-        },
-      })
-      .then((res) => {
-        state.room.send('track_state', res.data)
-      })
-  },
-  updateTrackState({ state }) {
-    this.$axios
-      .get(`${process.env.SPOTIFY_BASE_API_URL}/me/player/currently-playing`, {
-        credentials: true,
-        headers: {
-          Authorization: `Bearer ${this.$cookies.get('access_token')}`,
-        },
-      })
-      .then((res) => {
-        state.room.send('update_track_state', res.data)
-      })
+  updateTrackState({ state }, trackState) {
+    state.room.send('update_track_state', trackState)
   },
   addSongToQueue({ state, rootState }, song) {
     const user = {}
@@ -145,5 +124,5 @@ export const actions = {
   leaveRoom({ state, commit }) {
     state.room.leave()
     commit('RESET_ROOM')
-  },
+  }
 }
