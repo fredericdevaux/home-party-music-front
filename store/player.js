@@ -2,31 +2,36 @@
 export const state = () => ({
   currentTrackState: {},
   deviceId: 0,
+  volume: 50,
 })
 
 export const getters = {
   currentTrackArtists: (state) => {
-    const { artists } = state.currentTrackState?.item || []
-    return artists ? artists.map((artist) => artist.name).join(', ') : null
+    const { artists } = state.currentTrackState?.item || ''
+    return artists.map((artist) => artist.name).join(', ')
   },
   currentTrackName: (state) => {
     const { name } = state.currentTrackState?.item || ''
     return name
   },
   currentTrackId: (state) => {
-    const { id } = state.currentTrackState?.item || 0
+    const {id} = state.currentTrackState?.item || 0;
     return id
   },
   currentTrackCover: (state) => {
-    const { imageUrl } = state.currentTrackState?.item || ''
+    const { imageUrl } = state.currentTrackState?.item || '/images/default-cover.png'
     return imageUrl
   },
-  currentTrackPosition: (state) => {
-    const { progressMs } = state.currentTrackState
+  currentTrackProgress: (state) => {
+    const { progressMs } = state.currentTrackState || 0
     return progressMs
   },
+  currentTrackDuration: (state) => {
+    const { duration } = state.currentTrackState?.item || 0
+    return duration
+  },
   isPlaying: (state) => {
-    const { isPlaying } = state.currentTrackState
+    const { isPlaying } = state.currentTrackState || false
     return isPlaying
   },
 }
@@ -37,5 +42,8 @@ export const mutations = {
   },
   SET_DEVICE_ID(state, deviceId) {
     state.deviceId = deviceId
+  },
+  CHANGE_VOLUME(state, volumePercent) {
+    state.volume = volumePercent
   },
 }
