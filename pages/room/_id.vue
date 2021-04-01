@@ -14,7 +14,7 @@
       <div class="w-1/3 h-full flex flex-col relative bg-black pt-16">
         <songs-queue-searchbar />
         <jukebox class="h-1/2 overflow-hidden" />
-        <chatroom class="flex-grow" />
+        <chatroom class="flex-grow h-72" />
         <player ref="player" @toggle_pause_video="toggleVideo" />
       </div>
     </div>
@@ -101,9 +101,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-.bg_video {
-  background: ;
-}
-</style>

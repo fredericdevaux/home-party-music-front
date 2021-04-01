@@ -19,8 +19,8 @@ export const getters = {
     return id
   },
   currentTrackCover: (state) => {
-    const { imageUrl } = state.currentTrackState?.item || '/images/default-cover.png'
-    return imageUrl
+    const { imageUrl } = state.currentTrackState?.item || ''
+    return imageUrl || '/images/default-cover.png'
   },
   currentTrackProgress: (state) => {
     const { progressMs } = state.currentTrackState || 0

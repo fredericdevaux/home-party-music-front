@@ -4,7 +4,9 @@ export const state = () => ({
   room: null,
   users: [],
   messages: [],
-  songsQueue: []
+  songsQueue: [],
+  songsHistory: [],
+  nextSongHistory: null
 })
 
 export const getters = {
@@ -14,6 +16,9 @@ export const getters = {
   },
   isAdmin: (state, getters, rootState) => {
     return getters.admin.id === rootState.user.id
+  },
+  songsHistory: (state) => {
+    return state.songsHistory.slice().reverse()
   }
 }
 
@@ -44,6 +49,12 @@ export const mutations = {
   },
   ADD_SONG(state, song) {
     state.songsQueue.push(song)
+  },
+  ADD_SONG_HISTORY(state, song) {
+    state.songsHistory.push(song)
+  },
+  ADD_NEXT_SONG_HISTORY(state, song) {
+    state.nextSongHistory = song
   },
   DELETE_SONG(state, songId) {
     deleteObjectFromArray(state.songsQueue, 'id', songId)
@@ -95,6 +106,10 @@ export const actions = {
       commit('ADD_SONG', song)
     })
 
+    state.room.onMessage('history_song_added', (song) => {
+      commit('ADD_NEXT_SONG_HISTORY', song)
+    })
+
     state.room.onMessage('song_deleted', (songId) => {
       commit('DELETE_SONG', songId)
     })
@@ -110,12 +125,13 @@ export const actions = {
     state.room.send('update_track_state', trackState)
   },
   addSongToQueue({ state, rootState }, song) {
-    const user = {}
-    user.sessionId = rootState.user.sessionId
-    user.id = rootState.user.id
-    user.username = rootState.user.username
-    user.avatarUrl = rootState.user.avatarUrl
-    song.user = user
+    song.user = {
+      sessionId: rootState.user.sessionId,
+      id: rootState.user.id,
+      username: rootState.user.username,
+      avatarUrl: rootState.user.avatarUrl,
+    }
+
     state.room.send('add_song_to_queue', song)
   },
   deleteSongFromQueue({ state }, songId) {
