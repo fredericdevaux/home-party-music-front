@@ -62,7 +62,8 @@
 
             <i>
               <mute v-if="volumePercent <= 0" class="w-10 h-10"/>
-              <sound v-else class="w-10 h-10 sound"  :class="{'sound--medium': volumePercent <= 66 && volumePercent > 33, 'sound--low': volumePercent <= 33 && volumePercent > 0}"/>
+              <sound v-else class="w-10 h-10 sound"
+                     :class="{'sound--medium': volumePercent <= 66 && volumePercent > 33, 'sound--low': volumePercent <= 33 && volumePercent > 0}"/>
             </i>
           </button>
         </div>
@@ -87,13 +88,14 @@ export default {
     pause,
     next,
     sound,
-    mute,
+    mute
   },
   data: () => ({
     player: null,
     showVolumeRange: false,
     playerProgress: 0,
-    oldVolume: 0
+    oldVolume: 0,
+    isChanging: false
   }),
   computed: {
     progressionPercentage() {
@@ -103,7 +105,8 @@ export default {
       username: (state) => state.user.username,
       deviceId: (state) => state.player.deviceId,
       volumePercent: (state) => state.player.volume,
-      songsQueue: (state) => state.room.songsQueue
+      songsQueue: (state) => state.room.songsQueue,
+      nextSongHistory: (state) => state.room.nextSongHistory
     }),
     ...mapGetters({
       isAdmin: 'room/isAdmin',
@@ -117,7 +120,7 @@ export default {
     })
   },
   watch: {
-    isPlaying(newVal, oldVal) {
+    isPlaying(newVal) {
       !this.isAdmin && this[!newVal ? 'pause' : 'resume']()
       this.$emit('toggle_pause_video', newVal)
     },
@@ -125,7 +128,6 @@ export default {
       newVal[0] && !this.currentTrackId && this.play(newVal[0].uri)
     },
     currentTrackId(newVal) {
-      !this.isAdmin && this.play(`spotify:track:${newVal}`)
       this.deleteSongFromQueue(newVal)
     },
     currentTrackProgress(newVal, oldVal) {
@@ -172,14 +174,8 @@ export default {
         this.player.addListener('playback_error', (e) => console.error(e))
 
         this.player.addListener('player_state_changed', (state) => {
+          if (this.isChanging) return
           this.isAdmin && this.updateTrackState(state)
-          if (
-            state.track_window.previous_tracks.find(
-              (x) => x.id === state.track_window.current_track.id
-            )
-          ) {
-            this.next()
-          }
         })
 
         this.player.addListener('ready', (data) => {
@@ -202,6 +198,7 @@ export default {
   methods: {
     next() {
       if (this.songsQueue.length) {
+        this.addSongToHistory(this.nextSongHistory)
         this.play(this.songsQueue[0].uri)
       } else {
         this.$axios.post(
@@ -258,7 +255,7 @@ export default {
       }
 
       data.uris = [trackUri]
-
+      this.isChanging = true
       this.$axios.put(
         `${process.env.SPOTIFY_BASE_API_URL}/me/player/play?device_id=${this.deviceId}`,
         data,
@@ -268,7 +265,11 @@ export default {
             Authorization: `Bearer ${this.$cookies.get('access_token')}`
           }
         }
-      )
+      ).then(res => {
+        this.isChanging = false
+      }).catch(err => {
+        this.isChanging = false
+      })
     },
     seek(position) {
       this.$axios.put(
@@ -283,7 +284,7 @@ export default {
       )
     },
     setSeek(e) {
-      if(!this.isAdmin) return null
+      if (!this.isAdmin) return null
       const seekPercentage = e.layerX * 100 / e.target.clientWidth
       const position = Math.trunc(seekPercentage * this.currentTrackDuration / 100)
       this.seek(position)
@@ -294,11 +295,12 @@ export default {
     },
     ...mapMutations({
       setDeviceId: 'player/SET_DEVICE_ID',
-      changeVolume: 'player/CHANGE_VOLUME'
+      changeVolume: 'player/CHANGE_VOLUME',
+      addSongToHistory: 'room/ADD_SONG_HISTORY'
     }),
     ...mapActions({
       updateTrackState: 'room/updateTrackState',
-      deleteSongFromQueue: 'room/deleteSongFromQueue'
+      deleteSongFromQueue: 'room/deleteSongFromQueue',
     })
   }
 }

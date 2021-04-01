@@ -20,8 +20,7 @@
             </span>
             <span v-if="index === 2" class="flex items-center justify-center text-center">
               <i class="mr-1.5"><history class="w-5 h-5" /></i>
-              {{ tabs[index].title }} (0)</span
-            >
+              {{ tabs[index].title }} ({{ songsHistory.length }})</span>
           </template>
         </jukebox-tab-header>
       </ul>
@@ -38,6 +37,7 @@
               <template v-slot:content>
                 <chatroom-members v-if="index === 0" />
                 <songs-queue v-if="index === 1" />
+                <history-queue v-if="index === 2" />
               </template>
             </jukebox-tab>
           </div>
@@ -78,7 +78,8 @@ export default {
     ...mapState({
       users: (state) => state.room.users,
       songsQueue: (state) => state.room.songsQueue,
-    }),
+      songsHistory: (state) => state.room.songsHistory,
+    })
   },
 }
 </script>

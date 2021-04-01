@@ -1,6 +1,6 @@
 <template>
   <div class="chatroom-messages border border-white">
-    <div class="chatroom-messages__wrapper">
+    <div ref="messagesWrapper" class="chatroom-messages__wrapper">
       <div ref="messagesContent" class="chatroom-messages__content">
         <chatroom-messages-item
           v-for="message in messages"
@@ -25,7 +25,11 @@ export default {
   },
   watch: {
     messages() {
-      // TODO scroll automatique vers le bas envoie message / this.$refs.messagesContent.scrollTop = this.$refs.messagesContent.scrollHeight
+      setTimeout(() => {
+        this.$refs.messagesWrapper.scrollTop = this.$refs.messagesWrapper.scrollHeight
+      }, 10)
+      console.log(this.$refs.messagesWrapper.scrollTop, this.$refs.messagesWrapper.scrollHeight, this.$refs.messagesContent.scrollHeight)
+      //this.$refs.messagesWrapper.$el.scrollTop = this.$refs.messagesWrapper.$el.scrollHeight
     },
   },
 }

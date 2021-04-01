@@ -50,6 +50,7 @@ export default {
   },
   methods: {
     addSong(song) {
+      if (this.isAdded) return null
       this.$emit('add_song')
       this.addSongToQueue(song)
     },
