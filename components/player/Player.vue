@@ -128,6 +128,7 @@ export default {
       newVal[0] && !this.currentTrackId && this.play(newVal[0].uri)
     },
     currentTrackId(newVal) {
+      !this.isAdmin && this.play(`spotify:track:${newVal}`)
       this.deleteSongFromQueue(newVal)
     },
     currentTrackProgress(newVal, oldVal) {
