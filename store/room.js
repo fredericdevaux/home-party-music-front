@@ -31,12 +31,16 @@ export const mutations = {
     state.users = []
     state.messages = []
     state.songsQueue = []
+    state.songsHistory = []
   },
   SET_USERS(state, users) {
     state.users = users
   },
   SET_SONGS_QUEUE(state, songQueues) {
     state.songsQueue = songQueues
+  },
+  SET_SONGS_HISTORY(state, songsHistory) {
+    state.songsHistory = songsHistory
   },
   ADD_MESSAGE(state, message) {
     state.messages.push(message)
@@ -75,6 +79,7 @@ export const actions = {
         root: true
       })
       commit('SET_SONGS_QUEUE', currentState.songsQueue)
+      commit('SET_SONGS_HISTORY', currentState.songsHistory)
       commit('SET_USERS', currentState.users)
     })
 
