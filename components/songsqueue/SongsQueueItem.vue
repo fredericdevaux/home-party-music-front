@@ -45,7 +45,7 @@ export default {
       return this.isAdded ? this.song.imageUrl : this.song.album.images[0].url
     },
     artists() {
-      return this.song.artists.map((artist) => artist.name).join(', ')
+      return this.song.artists.map((artist) => artist.name).join(', ') || ''
     },
   },
   methods: {

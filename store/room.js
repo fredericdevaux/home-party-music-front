@@ -57,6 +57,9 @@ export const mutations = {
   ADD_SONG_HISTORY(state, song) {
     state.songsHistory.push(song)
   },
+  ADD_NEXT_SONG_HISTORY(state, song) {
+    state.nextSongHistory = song
+  },
   DELETE_SONG(state, songId) {
     deleteObjectFromArray(state.songsQueue, 'id', songId)
   }
@@ -109,16 +112,16 @@ export const actions = {
     })
 
     state.room.onMessage('history_song_added', (song) => {
-      dispatch('addNextSongHistory', song)
+      commit('ADD_SONG_HISTORY', song)
+    })
+
+    state.room.onMessage('next_history_song_added', (song) => {
+      commit('ADD_NEXT_SONG_HISTORY', song)
     })
 
     state.room.onMessage('song_deleted', (songId) => {
       commit('DELETE_SONG', songId)
     })
-  },
-  addNextSongHistory({ state, commit, getters }, song) {
-    commit('ADD_SONG_HISTORY', song)
-    getters.isAdmin && state.room.send('add_song_history', song)
   },
   sendMessage({ state, rootState }, messageContent) {
     const message = {}
@@ -131,7 +134,7 @@ export const actions = {
     state.room.send('update_track_state', trackState)
   },
   addSongToQueue({ state, rootState }, song) {
-    song.user = {
+    song.queueBy = {
       sessionId: rootState.user.sessionId,
       id: rootState.user.id,
       username: rootState.user.username,
@@ -139,6 +142,9 @@ export const actions = {
     }
 
     state.room.send('add_song_to_queue', song)
+  },
+  addSongToHistory({ state, commit, getter }, song) {
+    getters.isAdmin && state.room.send('add_song_history', song)
   },
   deleteSongFromQueue({ state }, songId) {
     state.room.send('delete_song_from_queue', songId)
