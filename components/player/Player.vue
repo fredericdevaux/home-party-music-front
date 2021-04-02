@@ -214,18 +214,6 @@ export default {
         )
       }
     },
-    previous() {
-      this.$axios.post(
-        `${process.env.SPOTIFY_BASE_API_URL}/me/player/previous?device_id=${this.deviceId}`,
-        {},
-        {
-          credentials: true,
-          headers: {
-            Authorization: `Bearer ${this.$cookies.get('access_token')}`
-          }
-        }
-      )
-    },
     resume() {
       this.$axios.put(
         `${process.env.SPOTIFY_BASE_API_URL}/me/player/play?device_id=${this.deviceId}`,
@@ -251,6 +239,7 @@ export default {
       )
     },
     play(trackUri, position = 0) {
+      if (!this.deviceId) return
       const data = {
         position_ms: position
       }
