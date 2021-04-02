@@ -28,8 +28,6 @@ export default {
       setTimeout(() => {
         this.$refs.messagesWrapper.scrollTop = this.$refs.messagesWrapper.scrollHeight
       }, 10)
-      console.log(this.$refs.messagesWrapper.scrollTop, this.$refs.messagesWrapper.scrollHeight, this.$refs.messagesContent.scrollHeight)
-      //this.$refs.messagesWrapper.$el.scrollTop = this.$refs.messagesWrapper.$el.scrollHeight
     },
   },
 }
