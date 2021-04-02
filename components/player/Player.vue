@@ -114,6 +114,7 @@ export default {
       currentTrackName: 'player/currentTrackName',
       currentTrackCover: 'player/currentTrackCover',
       currentTrackId: 'player/currentTrackId',
+      currentTrackUid: 'player/currentTrackUid',
       currentTrackProgress: 'player/currentTrackProgress',
       currentTrackDuration: 'player/currentTrackDuration',
       isPlaying: 'player/isPlaying'
@@ -125,11 +126,11 @@ export default {
       this.$emit('toggle_pause_video', newVal)
     },
     songsQueue(newVal) {
-      newVal[0] && !this.currentTrackId && this.play(newVal[0].uri)
+      newVal[0] && !this.currentTrackUid && this.play(newVal[0].uri)
     },
-    currentTrackId(newVal) {
-      !this.isAdmin && this.play(`spotify:track:${newVal}`)
-      this.deleteSongFromQueue(newVal)
+    currentTrackUid(newVal) {
+      !this.isAdmin && this.play(`spotify:track:${this.currentTrackId}`)
+      this.isAdmin && this.deleteSongFromQueue(this.currentTrackId)
     },
     currentTrackProgress(newVal, oldVal) {
       this.playerProgress = newVal
@@ -177,6 +178,14 @@ export default {
         this.player.addListener('player_state_changed', (state) => {
           if (this.isChanging) return
           this.isAdmin && this.updateTrackState(state)
+          // dans le cas où une musique se change sans action des users
+          if (
+            state.track_window.previous_tracks.find(
+              (x) => x.id === state.track_window.current_track.id
+            )
+          ) {
+            this.isAdmin && this.next()
+          }
         })
 
         this.player.addListener('ready', (data) => {
@@ -286,11 +295,11 @@ export default {
     ...mapMutations({
       setDeviceId: 'player/SET_DEVICE_ID',
       changeVolume: 'player/CHANGE_VOLUME',
-      addSongToHistory: 'room/ADD_SONG_HISTORY'
     }),
     ...mapActions({
       updateTrackState: 'room/updateTrackState',
       deleteSongFromQueue: 'room/deleteSongFromQueue',
+      addSongToHistory: 'room/addSongToHistory',
     })
   }
 }
