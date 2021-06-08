@@ -1,3 +1,4 @@
+<!--
 <template>
   <div>
     <canvas
@@ -19,6 +20,7 @@ var positionZ = -700;
 clock = new THREE.Clock();
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 import * as THREE from 'three'
+// import { OrbitControls } from "https://threejs.org/examples/jsm/controls/OrbitControls.js";
 export default {
   name: 'SceneTest',
   mounted() {
@@ -175,20 +177,90 @@ export default {
         console.error('Error',error)
       }) ;
 
-    // render animation
-    requestAnimationFrame(render)
-    function render() {
+      renderer = new THREE.WebGLRenderer({
+        canvas: document.getElementById('myCanvas'),
+        antialias: true,
+      })
+
+      // eslint-disable-next-line prettier/prettier
+      renderer.setClearColor(0xFFFFFF)
+      renderer.setPixelRatio(window.devicePixelRatio)
+      renderer.setSize(window.innerWidth, window.innerHeight)
+
+      document.body.appendChild(renderer.domElement);
+
+      animate();
+    }
+}
+
+    
+    function beatMaker() {
+      const x = Math.floor(Math.random() * Math.floor(2));
+      if (x === 0) {
+        return 0.003;
+      } else {
+        return 0.01;
+      }
+    }
+
+    function volumeMaker() {
+      const x = Math.floor(Math.random() * Math.floor(2))
+      if (x === 0) {
+        return 0.004
+      } else {
+        return 0.001
+      }
+    }
+
+    function animate(){
+      requestAnimationFrame(animate);
+
+      // mesh.rotation.x += 0.01;
+      // mesh.rotation.y += 0.02;
+
+      // Keyboard movement inputs
+      if(keyboard[83]){ // S key
+        camera.translateZ( player.speed );
+      }
+      if(keyboard[90]){ // Z key
+        camera.translateZ( - player.speed );
+      }
+      if(keyboard[81]){ // Q key
+        camera.translateX( - player.speed );
+      }
+      if(keyboard[68]){ // D key
+        camera.translateX( player.speed );
+      }
+
+      // Keyboard turn inputs
+      if(keyboard[37]){ // left arrow key
+        camera.rotation.y += player.turnSpeed;
+      }
+      if(keyboard[39]){ // right arrow key
+        camera.rotation.y -= player.turnSpeed;
+      }
+
       mesh.rotation.x += beatMaker()
       mesh.rotation.y += volumeMaker()
       mesh2.rotation.x += beatMaker()
       mesh2.rotation.y += volumeMaker()
-      mesh3.rotation.x += beatMaker()
-      mesh3.rotation.y += volumeMaker()
-      renderer.render(scene, camera)
-      requestAnimationFrame(render)
+
+      renderer.render(scene, camera);
     }
-  },
-}
+
+    function keyDown(event){
+      keyboard[event.keyCode] = true;
+    }
+
+    function keyUp(event){
+      keyboard[event.keyCode] = false;
+    }
+
+    window.addEventListener('keydown', keyDown);
+    window.addEventListener('keyup', keyUp);
+
+    window.onload = init;
+
 
 function keyPressed(key){
   switch(key){
