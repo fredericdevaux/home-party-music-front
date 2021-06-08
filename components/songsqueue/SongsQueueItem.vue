@@ -12,7 +12,11 @@
       </h5>
       <p
         v-if="song.queueBy"
-        class="text-gray-500 text-xs whitespace-nowrap overflow-ellipsis overflow-hidden"
+        class="
+          text-gray-500 text-xs
+          whitespace-nowrap
+          overflow-ellipsis overflow-hidden
+        "
       >
         Proposé par {{ song.queueBy.username }}
       </p>

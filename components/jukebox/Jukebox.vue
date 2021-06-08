@@ -1,6 +1,5 @@
 <template>
   <div class="border">
-    <button @click="createBlindtest">Blindtest</button>
     <div class="w-full h-full">
       <ul class="flex mb-0 list-none flex-wrap flex-row">
         <jukebox-tab-header
@@ -11,22 +10,40 @@
           @open_tab="openTab = index"
         >
           <template v-slot:content>
-            <span v-if="index === 0" class="flex items-center justify-center text-center">
+            <span
+              v-if="index === 0"
+              class="flex items-center justify-center text-center"
+            >
               <i class="mr-1.5"><users class="w-5 h-5" /></i>
               {{ tabs[index].title }} ({{ users.length }})
             </span>
-            <span v-if="index === 1" class="flex items-center justify-center text-center">
+            <span
+              v-if="index === 1"
+              class="flex items-center justify-center text-center"
+            >
               <i class="mr-1.5"><queue class="w-5 h-5" /></i>
               {{ tabs[index].title }} ({{ songsQueue.length }})
             </span>
-            <span v-if="index === 2" class="flex items-center justify-center text-center">
+            <span
+              v-if="index === 2"
+              class="flex items-center justify-center text-center"
+            >
               <i class="mr-1.5"><history class="w-5 h-5" /></i>
-              {{ tabs[index].title }} ({{ songsHistory.length }})</span>
+              {{ tabs[index].title }} ({{ songsHistory.length }})</span
+            >
           </template>
         </jukebox-tab-header>
       </ul>
       <div
-        class="relative flex flex-col min-w-0 break-words w-full shadow-lg tabs-items"
+        class="
+          relative
+          flex flex-col
+          min-w-0
+          break-words
+          w-full
+          shadow-lg
+          tabs-items
+        "
       >
         <div class="flex-auto h-full">
           <div class="tab-content tab-space h-full">
@@ -49,7 +66,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import users from '~/assets/svg/users.svg?inline'
 import queue from '~/assets/svg/queue.svg?inline'
 import history from '~/assets/svg/history.svg?inline'
@@ -80,13 +97,13 @@ export default {
       users: (state) => state.room.users,
       songsQueue: (state) => state.room.songsQueue,
       songsHistory: (state) => state.room.songsHistory,
-    })
+    }),
   },
   methods: {
     ...mapActions({
-      createBlindtest: 'room/createBlindtest'
-    })
-  }
+      createBlindtest: 'room/createBlindtest',
+    }),
+  },
 }
 </script>
 

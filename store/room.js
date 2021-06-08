@@ -7,7 +7,7 @@ export const state = () => ({
   messages: [],
   songsQueue: [],
   songsHistory: [],
-  nextSongHistory: null
+  nextSongHistory: null,
 })
 
 export const getters = {
@@ -20,7 +20,7 @@ export const getters = {
   },
   songsHistory: (state) => {
     return state.songsHistory.slice().reverse()
-  }
+  },
 }
 
 export const mutations = {
@@ -66,7 +66,7 @@ export const mutations = {
   },
   CHANGE_ROOM_STATE(state, roomState) {
     state.roomState = roomState
-  }
+  },
 }
 
 export const actions = {
@@ -80,7 +80,7 @@ export const actions = {
 
     state.room.onMessage('set_state', (currentState) => {
       commit('player/SET_CURRENT_TRACK', currentState.trackState, {
-        root: true
+        root: true,
       })
       commit('SET_SONGS_QUEUE', currentState.songsQueue)
       commit('SET_SONGS_HISTORY', currentState.songsHistory)
@@ -132,11 +132,11 @@ export const actions = {
     })
 
     state.room.onMessage('change_blindtest_state', (blindtestState) => {
-      commit('blindtest/CHANGE_STATE',blindtestState, { root: true })
+      commit('blindtest/CHANGE_STATE', blindtestState, { root: true })
     })
 
     state.room.onMessage('new_blindtest_music', (track) => {
-      commit('blindtest/SET_CURRENT_TRACK',track, { root: true })
+      commit('blindtest/SET_CURRENT_TRACK', track, { root: true })
     })
   },
   sendMessage({ state, rootState }, messageContent) {
@@ -154,7 +154,7 @@ export const actions = {
       sessionId: rootState.user.sessionId,
       id: rootState.user.id,
       username: rootState.user.username,
-      avatarUrl: rootState.user.avatarUrl
+      avatarUrl: rootState.user.avatarUrl,
     }
 
     state.room.send('add_song_to_queue', song)
@@ -173,6 +173,9 @@ export const actions = {
     state.room.send('creating_blindtest')
   },
   sendGenreToGetTracks({ state }, genreId) {
-    state.room.send('choose_blindtest_tracks', { genreId, accessToken: this.$cookies.get('access_token') })
-  }
+    state.room.send('choose_blindtest_tracks', {
+      genreId,
+      accessToken: this.$cookies.get('access_token'),
+    })
+  },
 }

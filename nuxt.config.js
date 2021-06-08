@@ -41,6 +41,7 @@ export default {
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
+    transpile: ['three'],
     postcss: {
       preset: {
         features: {
@@ -50,7 +51,6 @@ export default {
       },
     },
   },
-
   styleResources: {
     scss: ['~/assets/styles/main.scss'],
   },

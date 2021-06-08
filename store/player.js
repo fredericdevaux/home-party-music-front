@@ -15,11 +15,11 @@ export const getters = {
     return name
   },
   currentTrackId: (state) => {
-    const {id} = state.currentTrackState?.item || '';
+    const { id } = state.currentTrackState?.item || ''
     return id
   },
   currentTrackUid: (state) => {
-    const {uid} = state.currentTrackState?.item || '';
+    const { uid } = state.currentTrackState?.item || ''
     return uid
   },
   currentTrackCover: (state) => {

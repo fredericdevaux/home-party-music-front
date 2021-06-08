@@ -1,12 +1,15 @@
 <template>
-  <div @click="getGenreSongs(genre.id)" class="blindtest-genre-card cursor-pointer">
-    <img :src="genre.icons[0].url" alt="">
-    <h3>{{genre.name}}</h3>
+  <div
+    class="blindtest-genre-card cursor-pointer"
+    @click="getGenreSongs(genre.id)"
+  >
+    <img :src="genre.icons[0].url" alt="" />
+    <h3>{{ genre.name }}</h3>
   </div>
 </template>
 
 <script>
-import { mapActions, mapMutations } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'BlindtestGenreCard',
@@ -16,17 +19,15 @@ export default {
       required: true,
       default() {
         return {}
-      }
-    }
+      },
+    },
   },
   methods: {
     ...mapActions({
-      getGenreSongs: 'blindtest/getGenreSongs'
-    })
-  }
+      getGenreSongs: 'blindtest/getGenreSongs',
+    }),
+  },
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

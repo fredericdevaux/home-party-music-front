@@ -4,7 +4,16 @@
     <input
       id="username"
       v-model="username"
-      class="focus:ring-indigo-500 focus:border-indigo-500 pl-2 pr-2 sm:text-sm border-gray-400 border-2 rounded-md text-black p-2"
+      class="
+        focus:ring-indigo-500 focus:border-indigo-500
+        pl-2
+        pr-2
+        sm:text-sm
+        border-gray-400 border-2
+        rounded-md
+        text-black
+        p-2
+      "
       type="text"
       name="username"
     />

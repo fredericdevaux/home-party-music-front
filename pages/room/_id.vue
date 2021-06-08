@@ -1,7 +1,7 @@
 <template>
   <div class="h-full">
     <div v-if="room" class="room flex overflow-hidden h-full">
-     <!-- <video
+      <!-- <video
         id="myVideo"
         ref="video"
         muted
@@ -12,12 +12,13 @@
       </video> -->
       <div class="room__part pt-16 h-full overflow-y-scroll flex-grow">
         <blindtest v-if="roomState === 'blindtest'"></blindtest>
+        <ball v-if="roomState === 'default'"></ball>
       </div>
       <div class="w-1/3 h-full flex flex-col relative bg-black pt-16">
         <songs-queue-searchbar />
         <jukebox class="h-1/2 overflow-hidden" />
         <chatroom class="flex-grow h-72" />
-        <player ref="player" @toggle_pause_video="toggleVideo" />
+        <player ref="player" />
       </div>
     </div>
     <div v-else class="h-full flex justify-center items-center text-4xl">
@@ -70,16 +71,13 @@ export default {
       room: (state) => state.room.room,
       id: (state) => state.user.id,
       avatarUrl: (state) => state.user.avatarUrl,
-      roomState: (state) => state.room.roomState
+      roomState: (state) => state.room.roomState,
     }),
   },
   beforeDestroy() {
     this.leaveRoom()
   },
   methods: {
-    toggleVideo(play) {
-      this.$refs.video[play ? 'play' : 'pause']()
-    },
     joinRoom() {
       this.client
         .joinById(this.$route.params.id, {

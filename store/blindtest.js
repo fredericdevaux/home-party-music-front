@@ -3,7 +3,7 @@ export const state = () => ({
   genre: '',
   currentTrack: {},
   tracks: [],
-  round: 1
+  round: 1,
 })
 
 export const mutations = {
@@ -12,11 +12,11 @@ export const mutations = {
   },
   SET_CURRENT_TRACK(state, track) {
     state.currentTrack = track
-  }
+  },
 }
 
 export const actions = {
   getGenreSongs({ state, dispatch }, genre) {
-    dispatch('room/sendGenreToGetTracks', genre, { root: true } )
-  }
+    dispatch('room/sendGenreToGetTracks', genre, { root: true })
+  },
 }
