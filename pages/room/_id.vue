@@ -1,7 +1,7 @@
 <template>
   <div class="h-full">
-    <div v-if="room" class="room flex h-full">
-      <video
+    <div v-if="room" class="room flex overflow-hidden h-full">
+     <!-- <video
         id="myVideo"
         ref="video"
         muted
@@ -9,8 +9,10 @@
         class="fixed w-full h-full top-0 left-0 z-0 object-cover"
       >
         <source src="/videos/videoplayback.webm" type="video/webm" />
-      </video>
-      <div class="room__part flex-grow"></div>
+      </video> -->
+      <div class="room__part pt-16 h-full overflow-y-scroll flex-grow">
+        <blindtest v-if="roomState === 'blindtest'"></blindtest>
+      </div>
       <div class="w-1/3 h-full flex flex-col relative bg-black pt-16">
         <songs-queue-searchbar />
         <jukebox class="h-1/2 overflow-hidden" />
@@ -68,6 +70,7 @@ export default {
       room: (state) => state.room.room,
       id: (state) => state.user.id,
       avatarUrl: (state) => state.user.avatarUrl,
+      roomState: (state) => state.room.roomState
     }),
   },
   beforeDestroy() {

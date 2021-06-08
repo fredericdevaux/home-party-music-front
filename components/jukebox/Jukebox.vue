@@ -1,5 +1,6 @@
 <template>
   <div class="border">
+    <button @click="createBlindtest">Blindtest</button>
     <div class="w-full h-full">
       <ul class="flex mb-0 list-none flex-wrap flex-row">
         <jukebox-tab-header
@@ -48,7 +49,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 import users from '~/assets/svg/users.svg?inline'
 import queue from '~/assets/svg/queue.svg?inline'
 import history from '~/assets/svg/history.svg?inline'
@@ -81,6 +82,11 @@ export default {
       songsHistory: (state) => state.room.songsHistory,
     })
   },
+  methods: {
+    ...mapActions({
+      createBlindtest: 'room/createBlindtest'
+    })
+  }
 }
 </script>
 

@@ -2,6 +2,7 @@ import { deleteObjectFromArray } from '@/utils/deleteObjectFromArray'
 
 export const state = () => ({
   room: null,
+  roomState: 'default',
   users: [],
   messages: [],
   songsQueue: [],
@@ -62,6 +63,9 @@ export const mutations = {
   },
   DELETE_SONG(state, songId) {
     deleteObjectFromArray(state.songsQueue, 'id', songId)
+  },
+  CHANGE_ROOM_STATE(state, roomState) {
+    state.roomState = roomState
   }
 }
 
@@ -122,6 +126,18 @@ export const actions = {
     state.room.onMessage('song_deleted', (songId) => {
       commit('DELETE_SONG', songId)
     })
+
+    state.room.onMessage('change_room_state', (roomState) => {
+      commit('CHANGE_ROOM_STATE', roomState)
+    })
+
+    state.room.onMessage('change_blindtest_state', (blindtestState) => {
+      commit('blindtest/CHANGE_STATE',blindtestState, { root: true })
+    })
+
+    state.room.onMessage('new_blindtest_music', (track) => {
+      commit('blindtest/SET_CURRENT_TRACK',track, { root: true })
+    })
   },
   sendMessage({ state, rootState }, messageContent) {
     const message = {}
@@ -152,5 +168,11 @@ export const actions = {
   leaveRoom({ state, commit }) {
     state.room.leave()
     commit('RESET_ROOM')
+  },
+  createBlindtest({ state }) {
+    state.room.send('creating_blindtest')
+  },
+  sendGenreToGetTracks({ state }, genreId) {
+    state.room.send('choose_blindtest_tracks', { genreId, accessToken: this.$cookies.get('access_token') })
   }
 }
