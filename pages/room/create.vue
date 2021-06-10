@@ -1,22 +1,27 @@
 <template>
-  <div class='h-full'>
-    <div class='container mx-auto'>
-      <div class='flex flex-col p-8'>
-        <label for='username' class='mb-4 text-4xl'>Nom d'utilisateur</label>
+  <div class="h-full">
+    <div class="container mx-auto">
+      <div class="flex flex-col p-8">
+        <label for="username" class="mb-4 text-4xl">Nom d'utilisateur</label>
         <input
-          id='username'
-          v-model='username'
-          class='
-        p-2 text-black w-full
-        sm:text-sm
-      '
-          type='text'
-          name='username'
+          id="username"
+          v-model="username"
+          class="p-2 text-black w-full sm:text-sm"
+          type="text"
+          name="username"
         />
         <button
-          class='hover:bg-purple-800 bg-purple-600 rounded-md text-white p-2 mt-4 font-bold'
-          :disabled='username.length < 3'
-          @click='createRoom()'
+          class="
+            hover:bg-purple-800
+            bg-purple-600
+            rounded-md
+            text-white
+            p-2
+            mt-4
+            font-bold
+          "
+          :disabled="username.length < 3"
+          @click="createRoom()"
         >
           Créer une room
         </button>
@@ -43,17 +48,17 @@ export default {
       },
       set(value) {
         this.setUsername(value)
-      }
+      },
     },
     ...mapState({
       client: (state) => state.client.client,
       usernameState: (state) => state.user.username,
       id: (state) => state.user.id,
-      avatarUrl: (state) => state.user.avatarUrl
+      avatarUrl: (state) => state.user.avatarUrl,
     }),
     ...mapGetters({
-      idSpotify: 'spotify/id'
-    })
+      idSpotify: 'spotify/id',
+    }),
   },
   methods: {
     createRoom() {
@@ -62,7 +67,7 @@ export default {
         .create('my_room', {
           username: this.username,
           id: this.id,
-          avatarUrl: this.avatarUrl
+          avatarUrl: this.avatarUrl,
         })
         .then((room) => {
           this.setRoom(room)
@@ -73,12 +78,12 @@ export default {
         })
     },
     ...mapMutations({
-      setUsername: 'user/SET_USERNAME'
+      setUsername: 'user/SET_USERNAME',
     }),
     ...mapActions({
-      setRoom: 'room/setRoom'
-    })
-  }
+      setRoom: 'room/setRoom',
+    }),
+  },
 }
 </script>
 
