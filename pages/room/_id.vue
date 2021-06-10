@@ -3,7 +3,7 @@
     <div v-if="room" class="room flex overflow-hidden h-full">
       <div class="room__part pt-16 h-full overflow-y-scroll flex-grow">
         <blindtest v-if="roomState === 'blindtest'"></blindtest>
-        <ball v-if="roomState === 'default'"></ball>
+        <ball  v-if="roomState === 'default'"></ball>
       </div>
       <div class="w-1/3 h-full flex flex-col relative bg-black pt-16">
         <button v-if="isAdmin" @click="createBlindtest">
@@ -89,6 +89,7 @@ export default {
           console.error(err)
         })
     },
+
     ...mapMutations({
       setUsername: 'user/SET_USERNAME',
     }),
