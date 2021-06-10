@@ -26,7 +26,7 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
-    ['@nuxtjs/dotenv', { filename: `.env.${process.env.ENV}` }],
+    ['@nuxtjs/dotenv', { filename: `.env.dev` }],
     '@nuxtjs/tailwindcss',
   ],
 
