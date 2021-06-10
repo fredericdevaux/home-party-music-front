@@ -5,6 +5,7 @@
       class="p-2 text-black w-full"
       type="text"
       placeholder="Choisis la prochaine masterclass de la room"
+      :disabled="roomState !== 'default'"
       @input="onType"
       @keydown="navigateInResults"
     />
@@ -25,6 +26,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'SongsQueueSearchbar',
   data: () => ({
@@ -36,6 +39,9 @@ export default {
     isOpen() {
       return this.songQuery.length >= 3
     },
+    ...mapState({
+      roomState: (state) => state.room.roomState,
+    }),
   },
   watch: {
     isOpen(newVal) {

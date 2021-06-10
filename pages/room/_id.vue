@@ -1,20 +1,14 @@
 <template>
   <div class="h-full">
     <div v-if="room" class="room flex overflow-hidden h-full">
-      <!-- <video
-        id="myVideo"
-        ref="video"
-        muted
-        loop
-        class="fixed w-full h-full top-0 left-0 z-0 object-cover"
-      >
-        <source src="/videos/videoplayback.webm" type="video/webm" />
-      </video> -->
       <div class="room__part pt-16 h-full overflow-y-scroll flex-grow">
         <blindtest v-if="roomState === 'blindtest'"></blindtest>
         <ball v-if="roomState === 'default'"></ball>
       </div>
       <div class="w-1/3 h-full flex flex-col relative bg-black pt-16">
+        <button v-if="isAdmin" @click="createBlindtest">
+          Lancer un blindtest
+        </button>
         <songs-queue-searchbar />
         <jukebox class="h-1/2 overflow-hidden" />
         <chatroom class="flex-grow h-72" />
@@ -44,13 +38,13 @@
 <script>
 /* eslint-disable camelcase */
 import { websocket } from '@/mixins/websocket'
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
 import Chatroom from '../../components/chatroom/Chatroom'
 
 export default {
   name: 'Id',
   components: { Chatroom },
-  middleware: ['spotify', 'tokens'],
+  middleware: ['tokens', 'spotify'],
   mixins: [websocket],
   layout: 'room',
   data: () => ({
@@ -72,6 +66,9 @@ export default {
       id: (state) => state.user.id,
       avatarUrl: (state) => state.user.avatarUrl,
       roomState: (state) => state.room.roomState,
+    }),
+    ...mapGetters({
+      isAdmin: 'room/isAdmin',
     }),
   },
   beforeDestroy() {
@@ -98,6 +95,7 @@ export default {
     ...mapActions({
       setRoom: 'room/setRoom',
       leaveRoom: 'room/leaveRoom',
+      createBlindtest: 'room/createBlindtest',
     }),
   },
 }

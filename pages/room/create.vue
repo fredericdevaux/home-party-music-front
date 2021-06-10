@@ -33,7 +33,7 @@ import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
 export default {
   name: 'Create',
   layout: 'default',
-  middleware: ['spotify', 'tokens'],
+  middleware: ['tokens', 'spotify'],
   mixins: [websocket],
   computed: {
     username: {

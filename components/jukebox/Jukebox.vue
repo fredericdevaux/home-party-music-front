@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapState } from 'vuex'
 import users from '~/assets/svg/users.svg?inline'
 import queue from '~/assets/svg/queue.svg?inline'
 import history from '~/assets/svg/history.svg?inline'
@@ -97,11 +97,6 @@ export default {
       users: (state) => state.room.users,
       songsQueue: (state) => state.room.songsQueue,
       songsHistory: (state) => state.room.songsHistory,
-    }),
-  },
-  methods: {
-    ...mapActions({
-      createBlindtest: 'room/createBlindtest',
     }),
   },
 }

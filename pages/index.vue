@@ -3,10 +3,16 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   layout: 'default',
-  middleware: ['tokens'],
-  created() {},
+  middleware: ['tokens', 'spotify'],
+  computed: {
+    ...mapState({
+      user: (state) => state.spotify.user,
+    }),
+  },
 }
 </script>
 

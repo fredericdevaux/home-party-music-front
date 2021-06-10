@@ -19,8 +19,10 @@
     "cookie-universal-nuxt": "^2.1.4",
     "core-js": "^3.6.5",
     "dayjs": "^1.9.6",
+    "gsap": "^3.6.1",
     "nuxt": "^2.14.6",
     "three": "^0.123.0",
+    "vue-circular-count-down-timer": "^1.0.4",
     "vue-dayjs-plugin": "^1.0.0"
   },
   "devDependencies": {

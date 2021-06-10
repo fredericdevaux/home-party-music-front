@@ -85,6 +85,10 @@ export const actions = {
       commit('SET_SONGS_QUEUE', currentState.songsQueue)
       commit('SET_SONGS_HISTORY', currentState.songsHistory)
       commit('SET_USERS', currentState.users)
+
+      if (currentState.roomState !== 'default') {
+        commit('CHANGE_ROOM_STATE', currentState.roomState)
+      }
     })
 
     state.room.onMessage('user_leave', (userId) => {
@@ -135,8 +139,17 @@ export const actions = {
       commit('blindtest/CHANGE_STATE', blindtestState, { root: true })
     })
 
-    state.room.onMessage('new_blindtest_music', (track) => {
+    state.room.onMessage('new_blindtest_music', ({ track, round }) => {
       commit('blindtest/SET_CURRENT_TRACK', track, { root: true })
+      commit('blindtest/SET_ROUND', round, { root: true })
+    })
+
+    state.room.onMessage('increase_user_blindtestscore', ({ user, score }) => {
+      dispatch('blindtest/addUserScore', { user, score }, { root: true })
+    })
+
+    state.room.onMessage('add_blindtest_track_history', (track) => {
+      commit('blindtest/ADD_TRACK_HISTORY', track)
     })
   },
   sendMessage({ state, rootState }, messageContent) {
@@ -166,7 +179,7 @@ export const actions = {
     state.room.send('delete_song_from_queue', songId)
   },
   leaveRoom({ state, commit }) {
-    state.room.leave()
+    state.room && state.room.leave()
     commit('RESET_ROOM')
   },
   createBlindtest({ state }) {

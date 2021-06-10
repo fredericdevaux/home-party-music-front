@@ -59,6 +59,7 @@
           v-else-if="!isPlaying && isAdmin"
           class="ml-1.5"
           title="Lire la chanson"
+          :disabled="roomState !== 'default'"
           @click="resume"
         >
           <i>
@@ -69,6 +70,7 @@
           v-if="isAdmin"
           class="ml-1.5"
           title="Chanson suivante"
+          :disabled="roomState !== 'default'"
           @click="next"
         >
           <i>
@@ -160,7 +162,6 @@ export default {
   data: () => ({
     player: null,
     showVolumeRange: false,
-    playerProgress: 0,
     oldVolume: 0,
     isChanging: false,
   }),
@@ -174,6 +175,8 @@ export default {
       volumePercent: (state) => state.player.volume,
       songsQueue: (state) => state.room.songsQueue,
       nextSongHistory: (state) => state.room.nextSongHistory,
+      roomState: (state) => state.room.roomState,
+      playerProgress: (state) => state.player.playerProgress,
     }),
     ...mapGetters({
       isAdmin: 'room/isAdmin',
@@ -188,6 +191,13 @@ export default {
     }),
   },
   watch: {
+    roomState(newVal) {
+      if (newVal === 'default' && !this.isPlaying && this.isAdmin) {
+        this.play()
+      } else if (newVal !== 'default' && this.isPlaying && this.isAdmin) {
+        this.pause()
+      }
+    },
     isPlaying(newVal) {
       !this.isAdmin && this[!newVal ? 'pause' : 'resume']()
     },
@@ -199,7 +209,7 @@ export default {
       this.isAdmin && this.deleteSongFromQueue(this.currentTrackId)
     },
     currentTrackProgress(newVal, oldVal) {
-      this.playerProgress = newVal
+      this.setPlayerProgress(newVal)
       if (Math.abs(newVal - oldVal) > 2000) {
         !this.isAdmin && this.seek(newVal)
       }
@@ -257,7 +267,7 @@ export default {
         this.player.addListener('ready', (data) => {
           this.setDeviceId(data.device_id)
           setInterval(() => {
-            if (this.isPlaying) this.playerProgress += 100
+            if (this.isPlaying) this.incrementPlayerProgress(100)
           }, 100)
           let position = this.currentTrackProgress
           if (!this.isAdmin) position = position + 2000
@@ -354,7 +364,7 @@ export default {
       )
     },
     setSeek(e) {
-      if (!this.isAdmin) return null
+      if (!this.isAdmin || this.roomState !== 'default') return null
       const seekPercentage = (e.layerX * 100) / e.target.clientWidth
       const position = Math.trunc(
         (seekPercentage * this.currentTrackDuration) / 100
@@ -368,6 +378,8 @@ export default {
     ...mapMutations({
       setDeviceId: 'player/SET_DEVICE_ID',
       changeVolume: 'player/CHANGE_VOLUME',
+      setPlayerProgress: 'player/SET_PLAYER_PROGRESS',
+      incrementPlayerProgress: 'player/INCREMENT_PLAYER_PROGRESS',
     }),
     ...mapActions({
       updateTrackState: 'room/updateTrackState',
