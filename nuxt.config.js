@@ -17,6 +17,7 @@ export default {
   plugins: [
     { src: '@/plugins/dayjs.js', ssr: false },
     { src: '@/plugins/colyseusjs.js', ssr: false },
+    { src: '@/plugins/circular-timer.js', ssr: false },
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)

@@ -29,7 +29,7 @@
               class="flex items-center justify-center text-center"
             >
               <i class="mr-1.5"><history class="w-5 h-5" /></i>
-              {{ tabs[index].title }} ({{ songsHistory.length }})</span
+              {{ tabs[index].title }} ({{ blindtestHistory.length }})</span
             >
           </template>
         </jukebox-tab-header>
@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import users from '~/assets/svg/users.svg?inline'
 import queue from '~/assets/svg/queue.svg?inline'
 import history from '~/assets/svg/history.svg?inline'
@@ -96,13 +96,16 @@ export default {
     ...mapState({
       users: (state) => state.room.users,
       songsQueue: (state) => state.room.songsQueue,
-      songsHistory: (state) => state.room.songsHistory,
+      blindtestHistory: (state) => state.blindtest.historyTracks,
     }),
-  },
-  methods: {
-    ...mapActions({
-      createBlindtest: 'room/createBlindtest',
+    ...mapGetters({
+      songsHistory: 'room/songsHistory',
     }),
+    historyQueue() {
+      return this.roomState === 'blindtest'
+        ? this.blindtestHistory
+        : this.songsHistory
+    },
   },
 }
 </script>

@@ -39,7 +39,7 @@ export default {
   name: 'Create',
   components: { SongsQueueSearchbar },
   layout: 'default',
-  middleware: ['spotify', 'tokens'],
+  middleware: ['tokens', 'spotify'],
   mixins: [websocket],
   computed: {
     username: {

@@ -21,7 +21,9 @@
     "dayjs": "^1.9.6",
     "nuxt": "^2.14.6",
     "three": "^0.123.0",
-    "vue-dayjs-plugin": "^1.0.0"
+    "vue-circular-count-down-timer": "^1.0.4",
+    "vue-dayjs-plugin": "^1.0.0",
+    "gsap": "^3.6.1"
   },
   "devDependencies": {
     "@nuxtjs/dotenv": "^1.4.1",
