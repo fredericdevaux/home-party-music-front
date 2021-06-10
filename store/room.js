@@ -149,7 +149,7 @@ export const actions = {
     })
 
     state.room.onMessage('add_blindtest_track_history', (track) => {
-      commit('blindtest/ADD_TRACK_HISTORY', track)
+      commit('blindtest/ADD_TRACK_HISTORY', track, { root: true })
     })
   },
   sendMessage({ state, rootState }, messageContent) {
