@@ -10,14 +10,19 @@ export default async function ({ app, redirect, store, route }) {
         },
       })
       .then((res) => {
-        store.commit('spotify/SET_USER', res.data, { root: true })
-        store.commit('user/SET_ID', res.data.id, { root: true })
-        store.commit('user/SET_AVATAR_URL', res.data.images[0].url, {
-          root: true,
-        })
-        store.commit('user/SET_USERNAME', res.data.id, { root: true })
+        if (!store.state.spotify.user) {
+          store.commit('spotify/SET_USER', res.data, { root: true })
+          store.commit('user/SET_ID', res.data.id, { root: true })
+          if (res.data.images[0]) {
+            store.commit('user/SET_AVATAR_URL', res.data.images[0].url, {
+              root: true,
+            })
+          }
+          store.commit('user/SET_USERNAME', res.data.id, { root: true })
+        }
       })
       .catch(async (err) => {
+        console.log(err)
         const status = err.response.status
         if (status === 401) {
           if (app.$cookies.get('refresh_token')) {
@@ -31,14 +36,14 @@ export default async function ({ app, redirect, store, route }) {
                 app.$cookies.set('access_token', res.access_token)
               })
               .catch(() => {
-                redirect(`${loginRedirect}`)
+                route.name !== 'index' && redirect(`${loginRedirect}`)
               })
           } else {
-            redirect(`${loginRedirect}`)
+            route.name !== 'index' && redirect(`${loginRedirect}`)
           }
         }
       })
   } else {
-    redirect(`${loginRedirect}`)
+    route.name !== 'index' && redirect(`${loginRedirect}`)
   }
 }

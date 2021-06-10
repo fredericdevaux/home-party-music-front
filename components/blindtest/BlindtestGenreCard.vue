@@ -1,10 +1,25 @@
 <template>
   <div
-    class="blindtest-genre-card cursor-pointer"
+    class="blindtest-genre-card cursor-pointer relative"
     @click="getGenreSongs(genre.id)"
   >
     <img :src="genre.icons[0].url" alt="" />
-    <h3>{{ genre.name }}</h3>
+    <div
+      class="bg-purple-500 opacity-80 absolute h-full w-full top-0 left-0"
+    ></div>
+    <h3
+      class="
+        font-bold
+        absolute
+        top-1/2
+        transform
+        -translate-x-1/2 -translate-y-1/2
+        left-1/2
+        text-center
+      "
+    >
+      {{ genre.name }}
+    </h3>
   </div>
 </template>
 

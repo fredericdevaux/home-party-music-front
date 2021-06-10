@@ -22,9 +22,12 @@
     </h1>
     <div v-if="spotifyUser" class="flex flex-row items-center">
       <img
-        v-if="spotifyUser.images.length"
         class="w-12 rounded-full mr-6"
-        :src="spotifyUser.images[0].url"
+        :src="
+          spotifyUser.images.length
+            ? spotifyUser.images[0].url
+            : '/images/default-user.png'
+        "
         :alt="`Utilisateur ${spotifyUser.id}`"
       />
 
