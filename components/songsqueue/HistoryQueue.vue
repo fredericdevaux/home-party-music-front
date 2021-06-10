@@ -1,7 +1,7 @@
 <template>
-  <ul v-if="songsHistory.length" class="songs-queue">
+  <ul v-if="historyQueue.length" class="songs-queue">
     <songs-queue-item
-      v-for="(song, index) in songsHistory"
+      v-for="(song, index) in historyQueue"
       :key="index"
       :is-added="true"
       :song="song"
@@ -18,9 +18,18 @@ import { mapGetters, mapState } from 'vuex'
 export default {
   name: 'HistoryQueue',
   computed: {
+    ...mapState({
+      roomState: (state) => state.room.roomState,
+      blindtestHistory: (state) => state.blindtest.historyTracks,
+    }),
     ...mapGetters({
-      songsHistory: 'room/songsHistory'
-    })
+      songsHistory: 'room/songsHistory',
+    }),
+    historyQueue() {
+      return this.roomState === 'blindtest'
+        ? this.blindtestHistory
+        : this.songsHistory
+    },
   },
 }
 </script>

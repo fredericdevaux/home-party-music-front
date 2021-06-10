@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "ENV=dev nuxt",
-    "build": "nuxt build",
-    "start": "nuxt start",
+    "build": "ENV=noprod nuxt build",
+    "start": "ENV=noprod nuxt start",
     "generate": "nuxt generate",
     "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "lint": "npm run lint:js",
@@ -20,7 +20,10 @@
     "core-js": "^3.6.5",
     "dayjs": "^1.9.6",
     "nuxt": "^2.14.6",
-    "vue-dayjs-plugin": "^1.0.0"
+    "three": "^0.123.0",
+    "vue-circular-count-down-timer": "^1.0.4",
+    "vue-dayjs-plugin": "^1.0.0",
+    "gsap": "^3.6.1"
   },
   "devDependencies": {
     "@nuxtjs/dotenv": "^1.4.1",
@@ -37,8 +40,11 @@
     "eslint-plugin-nuxt": "^1.0.0",
     "eslint-plugin-prettier": "^3.1.4",
     "node-sass": "^5.0.0",
-    "postcss": "^7.0.35",
+    "fibers": "^5.0.0",
+    "prettier": "^2.1.2",
+    "sass": "^1.29.0",
     "sass-loader": "^10.1.0",
+    "postcss": "^7.0.35",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.3"
   }
 }

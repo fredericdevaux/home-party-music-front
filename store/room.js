@@ -2,11 +2,12 @@ import { deleteObjectFromArray } from '@/utils/deleteObjectFromArray'
 
 export const state = () => ({
   room: null,
+  roomState: 'default',
   users: [],
   messages: [],
   songsQueue: [],
   songsHistory: [],
-  nextSongHistory: null
+  nextSongHistory: null,
 })
 
 export const getters = {
@@ -19,7 +20,7 @@ export const getters = {
   },
   songsHistory: (state) => {
     return state.songsHistory.slice().reverse()
-  }
+  },
 }
 
 export const mutations = {
@@ -62,7 +63,10 @@ export const mutations = {
   },
   DELETE_SONG(state, songId) {
     deleteObjectFromArray(state.songsQueue, 'id', songId)
-  }
+  },
+  CHANGE_ROOM_STATE(state, roomState) {
+    state.roomState = roomState
+  },
 }
 
 export const actions = {
@@ -76,11 +80,15 @@ export const actions = {
 
     state.room.onMessage('set_state', (currentState) => {
       commit('player/SET_CURRENT_TRACK', currentState.trackState, {
-        root: true
+        root: true,
       })
       commit('SET_SONGS_QUEUE', currentState.songsQueue)
       commit('SET_SONGS_HISTORY', currentState.songsHistory)
       commit('SET_USERS', currentState.users)
+
+      if (currentState.roomState !== 'default') {
+        commit('CHANGE_ROOM_STATE', currentState.roomState)
+      }
     })
 
     state.room.onMessage('user_leave', (userId) => {
@@ -122,6 +130,27 @@ export const actions = {
     state.room.onMessage('song_deleted', (songId) => {
       commit('DELETE_SONG', songId)
     })
+
+    state.room.onMessage('change_room_state', (roomState) => {
+      commit('CHANGE_ROOM_STATE', roomState)
+    })
+
+    state.room.onMessage('change_blindtest_state', (blindtestState) => {
+      commit('blindtest/CHANGE_STATE', blindtestState, { root: true })
+    })
+
+    state.room.onMessage('new_blindtest_music', ({ track, round }) => {
+      commit('blindtest/SET_CURRENT_TRACK', track, { root: true })
+      commit('blindtest/SET_ROUND', round, { root: true })
+    })
+
+    state.room.onMessage('increase_user_blindtestscore', ({ user, score }) => {
+      dispatch('blindtest/addUserScore', { user, score }, { root: true })
+    })
+
+    state.room.onMessage('add_blindtest_track_history', (track) => {
+      commit('blindtest/ADD_TRACK_HISTORY', track, { root: true })
+    })
   },
   sendMessage({ state, rootState }, messageContent) {
     const message = {}
@@ -138,7 +167,7 @@ export const actions = {
       sessionId: rootState.user.sessionId,
       id: rootState.user.id,
       username: rootState.user.username,
-      avatarUrl: rootState.user.avatarUrl
+      avatarUrl: rootState.user.avatarUrl,
     }
 
     state.room.send('add_song_to_queue', song)
@@ -150,7 +179,16 @@ export const actions = {
     state.room.send('delete_song_from_queue', songId)
   },
   leaveRoom({ state, commit }) {
-    state.room.leave()
+    state.room && state.room.leave()
     commit('RESET_ROOM')
-  }
+  },
+  createBlindtest({ state }) {
+    state.room.send('creating_blindtest')
+  },
+  sendGenreToGetTracks({ state }, genreId) {
+    state.room.send('choose_blindtest_tracks', {
+      genreId,
+      accessToken: this.$cookies.get('access_token'),
+    })
+  },
 }

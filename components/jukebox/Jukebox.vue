@@ -10,22 +10,40 @@
           @open_tab="openTab = index"
         >
           <template v-slot:content>
-            <span v-if="index === 0" class="flex items-center justify-center text-center">
+            <span
+              v-if="index === 0"
+              class="flex items-center justify-center text-center"
+            >
               <i class="mr-1.5"><users class="w-5 h-5" /></i>
               {{ tabs[index].title }} ({{ users.length }})
             </span>
-            <span v-if="index === 1" class="flex items-center justify-center text-center">
+            <span
+              v-if="index === 1"
+              class="flex items-center justify-center text-center"
+            >
               <i class="mr-1.5"><queue class="w-5 h-5" /></i>
               {{ tabs[index].title }} ({{ songsQueue.length }})
             </span>
-            <span v-if="index === 2" class="flex items-center justify-center text-center">
+            <span
+              v-if="index === 2"
+              class="flex items-center justify-center text-center"
+            >
               <i class="mr-1.5"><history class="w-5 h-5" /></i>
-              {{ tabs[index].title }} ({{ songsHistory.length }})</span>
+              {{ tabs[index].title }} ({{ blindtestHistory.length }})</span
+            >
           </template>
         </jukebox-tab-header>
       </ul>
       <div
-        class="relative flex flex-col min-w-0 break-words w-full shadow-lg tabs-items"
+        class="
+          relative
+          flex flex-col
+          min-w-0
+          break-words
+          w-full
+          shadow-lg
+          tabs-items
+        "
       >
         <div class="flex-auto h-full">
           <div class="tab-content tab-space h-full">
@@ -48,7 +66,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import users from '~/assets/svg/users.svg?inline'
 import queue from '~/assets/svg/queue.svg?inline'
 import history from '~/assets/svg/history.svg?inline'
@@ -78,8 +96,16 @@ export default {
     ...mapState({
       users: (state) => state.room.users,
       songsQueue: (state) => state.room.songsQueue,
-      songsHistory: (state) => state.room.songsHistory,
-    })
+      blindtestHistory: (state) => state.blindtest.historyTracks,
+    }),
+    ...mapGetters({
+      songsHistory: 'room/songsHistory',
+    }),
+    historyQueue() {
+      return this.roomState === 'blindtest'
+        ? this.blindtestHistory
+        : this.songsHistory
+    },
   },
 }
 </script>

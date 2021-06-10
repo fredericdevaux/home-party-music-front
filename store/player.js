@@ -3,6 +3,7 @@ export const state = () => ({
   currentTrackState: {},
   deviceId: 0,
   volume: 50,
+  playerProgress: 0,
 })
 
 export const getters = {
@@ -15,11 +16,11 @@ export const getters = {
     return name
   },
   currentTrackId: (state) => {
-    const {id} = state.currentTrackState?.item || '';
+    const { id } = state.currentTrackState?.item || ''
     return id
   },
   currentTrackUid: (state) => {
-    const {uid} = state.currentTrackState?.item || '';
+    const { uid } = state.currentTrackState?.item || ''
     return uid
   },
   currentTrackCover: (state) => {
@@ -49,5 +50,11 @@ export const mutations = {
   },
   CHANGE_VOLUME(state, volumePercent) {
     state.volume = volumePercent
+  },
+  SET_PLAYER_PROGRESS(state, playerProgress) {
+    state.playerProgress = playerProgress
+  },
+  INCREMENT_PLAYER_PROGRESS(state, playerProgress) {
+    state.playerProgress += playerProgress
   },
 }

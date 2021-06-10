@@ -10,7 +10,7 @@
 export default {
   name: 'Index',
   layout: 'default',
-  middleware: ['spotify', 'tokens'],
+  middleware: ['tokens', 'spotify'],
 }
 </script>
 

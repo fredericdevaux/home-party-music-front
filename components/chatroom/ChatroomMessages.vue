@@ -26,7 +26,8 @@ export default {
   watch: {
     messages() {
       setTimeout(() => {
-        this.$refs.messagesWrapper.scrollTop = this.$refs.messagesWrapper.scrollHeight
+        this.$refs.messagesWrapper.scrollTop =
+          this.$refs.messagesWrapper.scrollHeight
       }, 10)
     },
   },

@@ -1,13 +1,33 @@
 <template>
   <div
-    class="text-white w-full px-8 pt-2 pb-2 mx-auto flex flex-row justify-between items-center fixed z-50 bg-black"
+    class="
+      text-white
+      w-full
+      px-8
+      pt-2
+      pb-2
+      mx-auto
+      flex flex-row
+      justify-between
+      items-center
+      fixed
+      z-50
+      bg-black
+    "
   >
-    <h1 class="text-4xl"><nuxt-link :to="'/'">SquadParty</nuxt-link></h1>
+    <h1 class="text-4xl">
+      <nuxt-link :to="'/'"
+        ><img class="w-44" src="/images/logo.png"
+      /></nuxt-link>
+    </h1>
     <div v-if="spotifyUser" class="flex flex-row items-center">
       <img
-        v-if="spotifyUser.images.length"
         class="w-12 rounded-full mr-6"
-        :src="spotifyUser.images[0].url"
+        :src="
+          spotifyUser.images.length
+            ? spotifyUser.images[0].url
+            : '/images/default-user.png'
+        "
         :alt="`Utilisateur ${spotifyUser.id}`"
       />
 
