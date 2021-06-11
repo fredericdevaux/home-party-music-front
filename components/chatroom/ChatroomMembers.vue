@@ -43,7 +43,6 @@ export default {
     }),
     ...mapGetters({
       admin: 'room/admin',
-      rankedUsers: 'room/rankedUsers',
     }),
     prettyMembers() {
       return this.roomState === 'blindtest'

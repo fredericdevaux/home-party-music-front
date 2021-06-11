@@ -35,11 +35,11 @@ $w: 20;
 /* -- CIRCLE -- */
 
 .circle {
-  width: $d + px;
-  height: $d + px;
+  width: 100px;
+  height: 100px;
   position: relative;
   border-radius: 999px;
-  box-shadow: inset 0 0 0 $w + px rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0 0 0 20px rgba(#7C3AED, .3);
 }
 
 .l-half,
@@ -55,7 +55,7 @@ $w: 20;
     width: 100%;
     height: 100%;
     box-sizing: border-box;
-    border: $w + px solid #fff;
+    border: 20px solid #7C3AED;
     animation-duration: var(--duration);
     animation-iteration-count: 1;
     animation-timing-function: linear;

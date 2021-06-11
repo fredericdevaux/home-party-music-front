@@ -67,6 +67,11 @@ export const mutations = {
   CHANGE_ROOM_STATE(state, roomState) {
     state.roomState = roomState
   },
+  RESET_USERS_SCORE(state) {
+    state.users.forEach(user => {
+      user.blindtestScore = 0
+    })
+  }
 }
 
 export const actions = {
@@ -151,6 +156,11 @@ export const actions = {
     state.room.onMessage('add_blindtest_track_history', (track) => {
       commit('blindtest/ADD_TRACK_HISTORY', track, { root: true })
     })
+
+    state.room.onMessage('restart_blindtest', () => {
+      commit('blindtest/RESET_BLINDTEST', null, {root: true})
+      commit('blindtest/CHANGE_STATE', 'choosing', {root: true})
+    })
   },
   sendMessage({ state, rootState }, messageContent) {
     const message = {}
@@ -184,6 +194,15 @@ export const actions = {
   },
   createBlindtest({ state }) {
     state.room.send('creating_blindtest')
+  },
+  restartBlindtest({state}) {
+    state.room.send('restart_blindtest')
+  },
+  stopBlindtest({ state }) {
+    state.room.send('stop_blindtest')
+  },
+  disableBlindtest({ state }) {
+    state.room.send('disable_blindtest')
   },
   sendGenreToGetTracks({ state }, genreId) {
     state.room.send('choose_blindtest_tracks', {

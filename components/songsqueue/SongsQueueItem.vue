@@ -11,7 +11,7 @@
         <span class="text-white">{{ song.name }}</span> - {{ artists }}
       </h5>
       <p
-        v-if="song.queueBy"
+        v-if="song.queueBy && song.queueBy.username"
         class="
           text-gray-500 text-xs
           whitespace-nowrap

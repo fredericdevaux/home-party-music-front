@@ -3,16 +3,22 @@
     <div v-if="room" class="room flex overflow-hidden h-full">
       <div class="room__part pt-16 h-full overflow-y-scroll flex-grow">
         <blindtest v-if="roomState === 'blindtest'"></blindtest>
-        <ball  v-if="roomState === 'default'"></ball>
+        <ball v-if="roomState === 'default'"></ball>
       </div>
       <div class="w-1/3 h-full flex flex-col relative bg-black pt-16">
-        <button v-if="isAdmin" @click="createBlindtest">
+        <button class='hover:bg-purple-800 bg-purple-600 text-white p-2 font-bold'
+                v-if="isAdmin && roomState !== 'blindtest'" @click="createBlindtest">
           Lancer un blindtest
         </button>
-        <songs-queue-searchbar />
-        <jukebox class='h-1/2 overflow-hidden' />
-        <chatroom class='flex-grow h-72' />
-        <player ref='player' />
+        <button class='hover:bg-purple-800 bg-purple-600 text-white p-2 font-bold'
+                :disabled="blindtestState === 'end'"
+                v-if="isAdmin && roomState === 'blindtest'" @click="stopBlindtest">
+          Arrêter le blindtest
+        </button>
+        <songs-queue-searchbar/>
+        <jukebox class="h-1/2 overflow-hidden"/>
+        <chatroom class="flex-grow h-72"/>
+        <player ref="player"/>
       </div>
     </div>
 
@@ -71,11 +77,12 @@ export default {
       room: (state) => state.room.room,
       id: (state) => state.user.id,
       avatarUrl: (state) => state.user.avatarUrl,
-      roomState: (state) => state.room.roomState
+      roomState: (state) => state.room.roomState,
+      blindtestState: (state) => state.blindtest.blindtestState
     }),
     ...mapGetters({
-      isAdmin: 'room/isAdmin',
-    }),
+      isAdmin: 'room/isAdmin'
+    })
   },
   beforeDestroy() {
     this.leaveRoom()
@@ -104,7 +111,8 @@ export default {
       setRoom: 'room/setRoom',
       leaveRoom: 'room/leaveRoom',
       createBlindtest: 'room/createBlindtest',
-    }),
-  },
+      stopBlindtest: 'room/stopBlindtest'
+    })
+  }
 }
 </script>
