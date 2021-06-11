@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "ENV=dev nuxt",
+    "dev": "nuxt",
     "build": "ENV=noprod nuxt build",
     "start": "ENV=noprod nuxt start",
     "generate": "nuxt generate",
