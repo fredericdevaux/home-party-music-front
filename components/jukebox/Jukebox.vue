@@ -14,21 +14,21 @@
               v-if="index === 0"
               class="flex items-center justify-center text-center"
             >
-              <i class="mr-1.5"><users class="w-5 h-5" /></i>
+              <i class="mr-1.5"><users class="w-3 h-3" /></i>
               {{ tabs[index].title }} ({{ users.length }})
             </span>
             <span
               v-if="index === 1"
               class="flex items-center justify-center text-center"
             >
-              <i class="mr-1.5"><queue class="w-5 h-5" /></i>
+              <i class="mr-1.5"><queue class="w-3 h-3" /></i>
               {{ tabs[index].title }} ({{ songsQueue.length }})
             </span>
             <span
               v-if="index === 2"
               class="flex items-center justify-center text-center"
             >
-              <i class="mr-1.5"><history class="w-5 h-5" /></i>
+              <i class="mr-1.5"><history class="w-3 h-3" /></i>
               {{ tabs[index].title }} ({{ blindtestHistory.length }})</span
             >
           </template>
