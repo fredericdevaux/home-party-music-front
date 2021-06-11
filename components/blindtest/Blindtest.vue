@@ -36,7 +36,7 @@
           >
         </div>
 
-        <div class="flex items-center justify-center mt-8">
+        <div v-if="isAdmin" class="flex items-center justify-center mt-8">
           <button @click="restartBlindtest" class='rounded-md hover:bg-purple-800 bg-purple-600 text-white p-2 font-bold m-2.5'>
             Relancer
           </button>
