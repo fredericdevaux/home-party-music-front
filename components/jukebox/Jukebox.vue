@@ -29,7 +29,7 @@
               class="flex items-center justify-center text-center"
             >
               <i class="mr-1.5"><history class="w-3 h-3" /></i>
-              {{ tabs[index].title }} ({{ blindtestHistory.length }})</span
+              {{ tabs[index].title }} ({{ historyQueue.length }})</span
             >
           </template>
         </jukebox-tab-header>

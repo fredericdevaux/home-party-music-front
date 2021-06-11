@@ -1,7 +1,7 @@
 <template>
   <div class="chatroom-members">
     <div
-      v-for="(member, index) in members"
+      v-for="(member, index) in prettyMembers"
       :key="member.sessionId"
       class="flex items-center p-1.5 border-b"
     >
