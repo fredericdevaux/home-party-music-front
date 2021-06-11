@@ -1,37 +1,43 @@
 <template>
-  <div class="container mx-auto mt-6">
-    <label for="username">Nom d'utilisateur</label>
-    <input
-      id="username"
-      v-model="username"
-      class="
-        focus:ring-indigo-500 focus:border-indigo-500
-        pl-2
-        pr-2
-        sm:text-sm
-        border-gray-400 border-2
-        rounded-md
-        text-black
-        p-2
-      "
-      type="text"
-      name="username"
-    />
-    <button
-      class="bg-green-600 rounded-md text-white pr-1.5 pl-1.5 pt-1 pb-1.5 mt-4"
-      :disabled="username.length < 3"
-      @click="createRoom()"
-    >
-      Créer une room
-    </button>
+  <div class="h-full">
+    <div class="container mx-auto">
+      <div class="flex flex-col p-8">
+        <label for="username" class="mb-4 text-4xl">Nom d'utilisateur</label>
+        <input
+          id="username"
+          v-model="username"
+          class="p-2 text-black w-full sm:text-sm"
+          type="text"
+          name="username"
+        />
+        <button
+          class="
+            hover:bg-purple-800
+            bg-purple-600
+            rounded-md
+            text-white
+            p-2
+            mt-4
+            font-bold
+          "
+          :disabled="username.length < 3"
+          @click="createRoom()"
+        >
+          Créer une room
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { websocket } from '@/mixins/websocket'
 import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
+import SongsQueueSearchbar from '../../components/songsqueue/SongsQueueSearchbar'
+
 export default {
   name: 'Create',
+  components: { SongsQueueSearchbar },
   layout: 'default',
   middleware: ['tokens', 'spotify'],
   mixins: [websocket],

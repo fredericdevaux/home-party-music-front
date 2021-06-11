@@ -21,22 +21,28 @@
         <player ref="player"/>
       </div>
     </div>
-    <div v-else class="h-full flex justify-center items-center text-4xl">
-      <label for="username">Nom d'utilisateur :</label>
-      <input
-        id="username"
-        v-model="username"
-        type="text"
-        name="username"
-        class="mx-3 p-2 rounded outline-none text-black"
-      />
-      <button
-        class="text-black bg-gray-200 rounded-xl p-2"
-        :disabled="!username.length && username.length < 3"
-        @click="joinRoom()"
-      >
-        Rejoindre la room
-      </button>
+
+    <div v-else class='container mx-auto mt-6'>
+      <div class='flex flex-col p-8'>
+        <label for='username' class='mb-4 text-4xl'>Nom d'utilisateur</label>
+        <input
+          id='username'
+          v-model='username'
+          type='text'
+          name='username'
+          class='
+        p-2 text-black w-full
+        sm:text-sm
+      '
+        />
+        <button
+          class='hover:bg-purple-800 bg-purple-600 rounded-md text-white p-2 mt-4 font-bold'
+          :disabled='!username.length && username.length < 3'
+          @click='joinRoom()'
+        >
+          Rejoindre la room
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -82,7 +88,8 @@ export default {
     this.leaveRoom()
   },
   methods: {
-    joinRoom() {
+    joinRoom()
+    {
       this.client
         .joinById(this.$route.params.id, {
           username: this.username,
