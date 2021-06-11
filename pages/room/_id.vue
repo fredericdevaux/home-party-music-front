@@ -3,34 +3,46 @@
     <div v-if="room" class="room flex overflow-hidden h-full">
       <div class="room__part pt-16 h-full overflow-y-scroll flex-grow">
         <blindtest v-if="roomState === 'blindtest'"></blindtest>
-        <ball  v-if="roomState === 'default'"></ball>
+        <ball v-if="roomState === 'default'"></ball>
       </div>
       <div class="w-1/3 h-full flex flex-col relative bg-black pt-16">
-        <button v-if="isAdmin" @click="createBlindtest">
+        <button class='hover:bg-purple-800 bg-purple-600 text-white p-2 font-bold'
+                v-if="isAdmin && roomState !== 'blindtest'" @click="createBlindtest">
           Lancer un blindtest
         </button>
-        <songs-queue-searchbar />
-        <jukebox class="h-1/2 overflow-hidden" />
-        <chatroom class="flex-grow h-72" />
-        <player ref="player" />
+        <button class='hover:bg-purple-800 bg-purple-600 text-white p-2 font-bold'
+                :disabled="blindtestState === 'end'"
+                v-if="isAdmin && roomState === 'blindtest'" @click="stopBlindtest">
+          Arrêter le blindtest
+        </button>
+        <songs-queue-searchbar/>
+        <jukebox class="h-1/2 overflow-hidden"/>
+        <chatroom class="flex-grow h-72"/>
+        <player ref="player"/>
       </div>
     </div>
-    <div v-else class="h-full flex justify-center items-center text-4xl">
-      <label for="username">Nom d'utilisateur :</label>
-      <input
-        id="username"
-        v-model="username"
-        type="text"
-        name="username"
-        class="mx-3 p-2 rounded outline-none text-black"
-      />
-      <button
-        class="text-black bg-gray-200 rounded-xl p-2"
-        :disabled="!username.length && username.length < 3"
-        @click="joinRoom()"
-      >
-        Rejoindre la room
-      </button>
+
+    <div v-else class='container mx-auto mt-6'>
+      <div class='flex flex-col p-8'>
+        <label for='username' class='mb-4 text-4xl'>Nom d'utilisateur</label>
+        <input
+          id='username'
+          v-model='username'
+          type='text'
+          name='username'
+          class='
+        p-2 text-black w-full
+        sm:text-sm
+      '
+        />
+        <button
+          class='hover:bg-purple-800 bg-purple-600 rounded-md text-white p-2 mt-4 font-bold'
+          :disabled='!username.length && username.length < 3'
+          @click='joinRoom()'
+        >
+          Rejoindre la room
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -48,7 +60,7 @@ export default {
   mixins: [websocket],
   layout: 'room',
   data: () => ({
-    usernameModel: '',
+    usernameModel: ''
   }),
   computed: {
     username: {
@@ -57,7 +69,7 @@ export default {
       },
       set(value) {
         this.setUsername(value)
-      },
+      }
     },
     ...mapState({
       client: (state) => state.client.client,
@@ -66,21 +78,23 @@ export default {
       id: (state) => state.user.id,
       avatarUrl: (state) => state.user.avatarUrl,
       roomState: (state) => state.room.roomState,
+      blindtestState: (state) => state.blindtest.blindtestState
     }),
     ...mapGetters({
-      isAdmin: 'room/isAdmin',
-    }),
+      isAdmin: 'room/isAdmin'
+    })
   },
   beforeDestroy() {
     this.leaveRoom()
   },
   methods: {
-    joinRoom() {
+    joinRoom()
+    {
       this.client
         .joinById(this.$route.params.id, {
           username: this.username,
           id: this.id,
-          avatarUrl: this.avatarUrl,
+          avatarUrl: this.avatarUrl
         })
         .then((room) => {
           this.setRoom(room)
@@ -91,13 +105,14 @@ export default {
     },
 
     ...mapMutations({
-      setUsername: 'user/SET_USERNAME',
+      setUsername: 'user/SET_USERNAME'
     }),
     ...mapActions({
       setRoom: 'room/setRoom',
       leaveRoom: 'room/leaveRoom',
       createBlindtest: 'room/createBlindtest',
-    }),
-  },
+      stopBlindtest: 'room/stopBlindtest'
+    })
+  }
 }
 </script>

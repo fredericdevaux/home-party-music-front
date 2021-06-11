@@ -38,7 +38,10 @@ export const actions = {
     )
     rootState.room.users[findIndex].blindtestScore += score
   },
-  sendUserPoints({ rootState }, score) {
-    rootState.room.room.send('increase_user_blindtestscore', score)
+  sendUserPoints({ rootState }, { score, type }) {
+    rootState.room.room.send('increase_user_blindtestscore', { score, type })
   },
+  resetBlindtest({commit}) {
+    commit('room/RESET_USERS_SCORE', null, {root: true})
+  }
 }

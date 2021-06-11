@@ -11,31 +11,63 @@
       />
     </div>
     <div v-else-if="!isAdmin && blindtestState === 'choosing'">
-      L'admin choisi un genre
+      L'admin choisi un genre...
     </div>
     <div v-if="blindtestState === 'load_songs'">Tracks loading</div>
-    <div v-if="blindtestState === 'end'">C'est fini</div>
+    <div v-if="blindtestState === 'end'">
+      <div class="w-1/2 mr-auto ml-auto">
+        <p class="text-xl text-center font-bold mb-8">La partie est finie ! Voici le classement final :</p>
+        <div
+          v-for="(member, index) in blindtestScores"
+          :key="member.sessionId"
+          class="flex items-center p-1.5 border-b"
+        >
+      <span class="mr-1.5">
+        {{ index + 1 }}.
+      </span>
+          <img
+            class="w-10"
+            :src="member.avatarUrl ? member.avatarUrl : '/images/default-user.png'"
+            alt=""
+          />
+          <p class="ml-1.5">{{ member.username }}</p>
+          <span class="ml-auto mr-0"
+          >{{ member.blindtestScore }}pts</span
+          >
+        </div>
+
+        <div class="flex items-center justify-center mt-8">
+          <button @click="restartBlindtest" class='rounded-md hover:bg-purple-800 bg-purple-600 text-white p-2 font-bold m-2.5'>
+            Relancer
+          </button>
+          <button @click="disableBlindtest" class='rounded-md hover:bg-purple-800 bg-purple-600 text-white p-2 font-bold m-2.5'>
+            Arrêter
+          </button>
+        </div>
+      </div>
+    </div>
     <div
       v-if="blindtestState === 'next_round' || blindtestState === 'playing'"
-      class="text-center"
+      class="text-center font-bold text-3xl"
     >
       Round {{ round }}/15
     </div>
     <div v-if="blindtestState === 'next_round'">
-      <blindtest-countdown :duration="5" :countdown="currentTimeNextRound" />
+      <blindtest-countdown :duration="5" :countdown="currentTimeNextRound"/>
     </div>
     <div v-if="blindtestState === 'playing'" class="text-center">
-      <blindtest-countdown :duration="30" :countdown="currentTime" />
-      <div class="">{{ message }}</div>
-      <form class="text-black" @submit.prevent="checkAnswer">
-        <input v-model="answer" type="text" placeholder="Proposition" />
-        <button type="submit">Valider</button>
+      <blindtest-countdown :duration="30" :countdown="currentTime"/>
+      <div class="message text-center">
+        <span v-if="message" class="inline-block bg-purple-600 p-2 rounded-2xl">{{ message }}</span>
+      </div>
+      <form class="text-black mt-8" @submit.prevent="checkAnswer">
+        <input class="p-2 text-black w-1/2 mr-auto ml-auto" v-model="answer" type="text" placeholder="Proposition"/>
       </form>
-      <div class="flex items-center">
-        <div v-if="trackFound" class="mr-1.5 bg-green-600">
+      <div class="flex items-center justify-center mt-8">
+        <div v-if="trackFound" class="mr-1.5 rounded-2xl bg-purple-600 p-2">
           {{ currentTrack.name }}
         </div>
-        <div v-if="artistFound" class="bg-green-600">
+        <div v-if="artistFound" class="rounded-2xl bg-purple-600 p-2">
           {{ currentTrackArtists }}
         </div>
       </div>
@@ -44,7 +76,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 
 export default {
   name: 'Blindtest',
@@ -60,21 +92,27 @@ export default {
     artistFound: false,
     allFoundMessage: false,
     artistFoundMessage: false,
-    trackFoundMessage: false,
+    trackFoundMessage: false
   }),
   computed: {
     currentTrackArtists() {
       const { artists } = this.currentTrack || ''
       return artists.map((artist) => artist.name).join(', ')
     },
+    blindtestScores() {
+      return this.members.sort((a, b) =>
+        a.blindtestScore < b.blindtestScore ? 1 : -1
+      )
+    },
     ...mapState({
       blindtestState: (state) => state.blindtest.blindtestState,
       round: (state) => state.blindtest.round,
       currentTrack: (state) => state.blindtest.currentTrack,
+      members: (state) => state.room.users
     }),
     ...mapGetters({
-      isAdmin: 'room/isAdmin',
-    }),
+      isAdmin: 'room/isAdmin'
+    })
   },
   watch: {
     currentTrack(newVal) {
@@ -93,10 +131,11 @@ export default {
         artist_time: 0,
         track_time: 0,
         custom_time: 0,
-        total_time: 0,
+        total_time: 0
       }
       if (newVal.previewUrl) {
         this.audio = new Audio(newVal.previewUrl)
+        this.audio.volume = .2
         this.audio.controls = false
         this.audio.addEventListener('timeupdate', () => {
           this.currentTime =
@@ -105,7 +144,7 @@ export default {
         this.audio.play()
       }
     },
-    blindtestState(newVal) {
+    blindtestState(newVal, oldVal) {
       if (newVal === 'next_round') {
         this.intervalNextRound = setInterval(() => {
           this.currentTimeNextRound = this.currentTimeNextRound - 1
@@ -114,19 +153,27 @@ export default {
         clearInterval(this.intervalNextRound)
         this.currentTimeNextRound = 5
       }
-    },
+
+      if (newVal === 'end' && this.audio) {
+        this.audio.pause()
+      }
+
+      if (oldVal === 'end') {
+        this.resetBlindtest()
+      }
+    }
   },
   created() {
     this.$axios
       .get(`${process.env.SPOTIFY_BASE_API_URL}/browse/categories`, {
         params: {
           country: 'FR',
-          limit: 12,
+          limit: 12
         },
         credentials: true,
         headers: {
-          Authorization: `Bearer ${this.$cookies.get('access_token')}`,
-        },
+          Authorization: `Bearer ${this.$cookies.get('access_token')}`
+        }
       })
       .then((res) => {
         this.genres = res.data.categories.items
@@ -176,7 +223,7 @@ export default {
         80: 'quatrevingt',
         90: 'quatrevingtdix',
         100: 'cent',
-        1000: 'mille',
+        1000: 'mille'
       }
 
       // Remove () and [] with content
@@ -226,19 +273,19 @@ export default {
       }
 
       if (titleArtistSimilarity > 0.9 || artistTitleSimilarity > 0.9) {
-        if (!this.artistFound && !this.trackFound) this.sendUserPoints(3)
+        if (!this.artistFound && !this.trackFound) this.sendUserPoints({ score: 3, type: 'all' })
 
         this.artistFound = true
         this.trackFound = true
       }
 
       if (titleSimilarity >= 0.9) {
-        if (!this.trackFound) this.sendUserPoints(1)
+        if (!this.trackFound) this.sendUserPoints({ score: 1, type: 'track' })
         this.trackFound = true
       }
 
       if (artistSimilarity >= 0.9) {
-        if (!this.artistFound) this.sendUserPoints(1)
+        if (!this.artistFound) this.sendUserPoints({ score: 1, type: 'artist' })
         this.artistFound = true
       }
 
@@ -248,24 +295,24 @@ export default {
         (titleArtistSimilarity < 0.9 && titleArtistSimilarity >= 0.6) ||
         (artistTitleSimilarity < 0.9 && artistTitleSimilarity >= 0.6)
       ) {
-        this.message = "Tu n'es pas loin !"
+        this.message = 'Tu n\'es pas loin !'
       } else if (
         titleSimilarity < 0.6 ||
         artistSimilarity < 0.6 ||
         titleArtistSimilarity < 0.6 ||
         artistTitleSimilarity < 0.6
       ) {
-        this.message = "Tu n'y es pas du tout..."
+        this.message = 'Tu n\'y es pas du tout...'
       }
 
       if (this.trackFound && this.artistFound && !this.allFoundMessage) {
-        this.message = "T'as tout trouvé, bien joué !"
+        this.message = 'T\'as tout trouvé, bien joué !'
         this.allFoundMessage = true
       } else if (this.trackFound && !this.trackFoundMessage) {
-        this.message = "T'as trouvé le nom de la musique !"
+        this.message = 'T\'as trouvé le nom de la musique !'
         this.trackFoundMessage = true
       } else if (this.artistFound && !this.artistFoundMessage) {
-        this.message = "T'as trouvé l'artiste !"
+        this.message = 'T\'as trouvé l\'artiste !'
         this.artistFoundMessage = true
       }
 
@@ -310,15 +357,24 @@ export default {
       }
       return costs[s2.length]
     },
+    ...mapMutations({
+      resetBlindtest: 'blindtest/RESET_BLINDTEST'
+    }),
     ...mapActions({
       sendUserPoints: 'blindtest/sendUserPoints',
-    }),
-  },
+      disableBlindtest: 'room/disableBlindtest',
+      restartBlindtest: 'room/restartBlindtest'
+    })
+  }
 }
 </script>
 
 <style scoped>
 .circle {
   margin: 40px auto;
+}
+
+.message {
+  height: 40px;
 }
 </style>
