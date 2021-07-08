@@ -14,6 +14,7 @@
       L'admin choisi un genre
     </div>
     <div v-if="blindtestState === 'load_songs'">Tracks loading</div>
+    <div v-if="blindtestState === 'end'">C'est fini</div>
     <div
       v-if="blindtestState === 'next_round' || blindtestState === 'playing'"
       class="text-center"

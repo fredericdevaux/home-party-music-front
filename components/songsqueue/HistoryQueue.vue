@@ -1,5 +1,5 @@
 <template>
-  <ul v-if="songsHistory.length" class="songs-queue">
+  <ul v-if="historyQueue.length" class="songs-queue">
     <songs-queue-item
       v-for="(song, index) in historyQueue"
       :key="index"
@@ -27,8 +27,8 @@ export default {
     }),
     historyQueue() {
       return this.roomState === 'blindtest'
-        ? this.songsHistory
-        : this.blindtestHistory
+        ? this.blindtestHistory
+        : this.songsHistory
     },
   },
 }
