@@ -20,9 +20,10 @@
         ><img class="w-44" src="/images/logo.png"
       /></nuxt-link>
     </h1>
+    <nuxt-link class="ml-auto mr-8 underline" :to="{ name: 'store' }">Boutique</nuxt-link>
     <div v-if="spotifyUser" class="flex flex-row items-center">
       <img
-        class="w-12 rounded-full mr-6"
+        class="w-12 rounded-full mr-3"
         :src="
           spotifyUser.images.length
             ? spotifyUser.images[0].url
@@ -35,7 +36,7 @@
         spotifyUser.id
       }}</nuxt-link>
     </div>
-    <a v-else :href="loginUrl">Connexion avec Spotify</a>
+    <a v-else class='hover:bg-purple-800 bg-purple-600 rounded-md text-white p-2 font-bold' :href="loginUrl">Connexion avec Spotify</a>
   </div>
 </template>
 
